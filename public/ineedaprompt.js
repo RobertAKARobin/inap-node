@@ -63,7 +63,8 @@ ineedaprompt.helpers = (function(){
   h.collect = function(array, callback){
     var out = [];
     h.eachIn(array, function(item, index){
-      out.push(callback(item, index));
+      var itemOut = callback(item, index);
+      if(itemOut !== undefined) out.push(itemOut);
     });
     return out;
   }

@@ -5,16 +5,62 @@
     <link rel="stylesheet" href="styles.css" />
     <script src="ineedaprompt.js"></script>
     <script>
+var h = (function helpers(){
+  var h = {};
+  h.el = function(str){
+    var e = {}, d = document;
+    if(str.charAt(0) === "#") e = d.getElementById(str.substring(1));
+    else e = d.querySelectorAll(str);
+    if(e instanceof NodeList && e.length === 1) e = e[0];
+    return e;
+  }
+  h.eachIn = ineedaprompt.helpers.eachIn;
+  h.collect = ineedaprompt.helpers.collect;
+  return h;
+}());
 window.onload = function(){
-  var wordOrder = ["noun","adj"];
-  ineedaprompt.getJSON("dictionary.json", function(dictionary){
-    var prompt = new ineedaprompt(wordOrder, dictionary).english();
-    document.querySelector("h1").innerText = prompt;
-  });
+
+  (function placeDefaultWordTypes(){
+    var wordTypes = ineedaprompt.default();
+    var list = h.el("#types")
+    h.eachIn(wordTypes, function(type){
+      var input = document.createElement("INPUT");
+      var label = document.createElement("LABEL");
+      input.type = "checkbox";
+      input.value = type;
+      if(Math.random() > 0.5) input.checked = true;
+      label.textContent = type;
+      label.appendChild(input);
+      list.appendChild(label);
+    });
+  }());
+
+  (function listenToButton(){
+    var button = h.el("#submit");
+    button.addEventListener("click", loadPrompt);
+  }());
+
+  function loadPrompt(){
+    var inputs = h.el("form input");
+    var wordOrder = h.collect(inputs, function(input){
+      if(input.checked) return input.value;
+    });
+    ineedaprompt.getJSON("dictionary.json", function(dictionary){
+      var prompt = new ineedaprompt(wordOrder, dictionary).english();
+      h.el("#foo").textContent = prompt;
+    });
+  }
+
+  loadPrompt();
+
 }
     </script>
   </head>
   <body>
-    <h1>Loading</h1>
+    <h1 id="foo">Loading</h1>
+    <form>
+      <fieldset id="types"></fieldset>
+      <button type="button" id="submit">Again!</button>
+    </form>
   </body>
 </html>
