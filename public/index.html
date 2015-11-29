@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>INeedAPrompt</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="ineedaprompt.js"></script>
+    <script>
+window.onload = function(){
+  var wordOrder = ["noun","adj"];
+  ineedaprompt.getJSON("dictionary.json", function(dictionary){
+    var prompt = new ineedaprompt(wordOrder, dictionary).english();
+    document.querySelector("h1").innerText = prompt;
+  });
+}
+    </script>
+  </head>
+  <body>
+    <h1>Loading</h1>
+  </body>
+</html>
