@@ -12,18 +12,9 @@ ineedaprompt.wordTypes = [
   "noun", "adjective", "adverb", "verb", "location"
 ]
 ineedaprompt.default = function(){
-  return ["adj", "adj", "noun", "adv", "verb", "adj", "adj", "noun", "loc"];
+  return ["adjective", "adjective", "noun", "adverb", "verb", "adjective", "adjective", "noun", "location"];
 }
 ineedaprompt.prepositions = ["aboard", "about", "above", "across", "after", "against", "along", "alongside", "amid", "among", "anti", "around", "as", "at", "before", "behind", "below", "beneath", "beside", "besides", "between", "beyond", "but", "by", "concerning", "considering", "despite", "down", "during", "except", "excepting", "excluding", "following", "for", "from", "in", "inside", "into", "like", "minus", "near", "of", "off", "on", "onto", "opposite", "outside", "over", "past", "per", "plus", "regarding", "round", "save", "since", "than", "through", "to", "toward", "towards", "under", "underneath", "unlike", "until", "up", "upon", "versus", "via", "with", "within", "without"];
-ineedaprompt.getJSON = function(path, callback){
-  var http = new XMLHttpRequest();
-  http.open("GET", path, true);
-  http.onreadystatechange = function(){
-    if(this.readyState !== 4 || this.status !== 200) return;
-    callback(JSON.parse(this.responseText));
-  }
-  http.send();
-}
 ineedaprompt.helpers = (function(){
   var h = {};
   h.eachIn = function(collection, callback){

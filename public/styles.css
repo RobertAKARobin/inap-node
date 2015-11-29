@@ -1,0 +1,144 @@
+*{
+  margin:0;
+  padding:0;
+  border:0;
+  outline:none;
+  font-weight:normal;
+  text-decoration:none;
+  font-family:inherit;
+  font-style:normal;
+  font-size:16px;
+  line-height:24px;
+  color:#222;
+  background-color:transparent;
+}
+a, label, button{
+  cursor:pointer;
+}
+html{
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  background-color:#eee;
+}
+body{
+  max-width:800px;
+  margin:0 auto;
+  text-align:center;
+}
+h1{
+
+}
+input[type=checkbox]{
+  position:absolute;
+  top:0;
+  left:0;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+  opacity:0.01;
+}
+button, label{
+  display:inline-block;
+}
+blockquote:before{
+  content:"\201c";
+}
+blockquote:after{
+  content:"\201d";
+}
+main{
+  padding-top:36px;
+}
+
+#promptOutput{
+  font-size:36px;
+  line-height:48px;
+  color:#222;
+  margin:70px auto;
+  padding:0 10px;
+}
+
+.plaque,
+.plaque:before,
+.plaque:after{
+  display:block;
+  width:100%;
+}
+.plaque{
+  position:relative;
+  background-color:rgba(0,0,0,0.1);
+}
+.plaque:before,
+.plaque:after{
+  opacity:0.1;
+  content:" ";
+  display:block;
+  position:absolute;
+  background-repeat:no-repeat;
+  background-size:100% auto;
+  height:70px;
+}
+.plaque:before{
+  top:-70px;
+  background-image:url("images/plaque_t.png");
+  background-position:bottom center;
+}
+.plaque:after{
+  bottom:-70px;
+  background-image:url("images/plaque_b.png");
+  background-position:top center;
+}
+
+.links{
+  margin:12px auto;
+}
+.links li{
+  display:inline-block;
+  vertical-align:bottom;
+}
+.links label,
+.links a{
+  border-radius:5px;
+}
+.links label,
+.links a{
+  color:#999;
+  padding:0.25em 1em;
+  transition:color 0.15s, background-color 0.1s;
+}
+.links label:hover,
+.links a:hover{
+  background-color:rgba(0,0,0,0.1);
+}
+
+#wordTypes label{
+  font-style:italic;
+}
+#wordTypes input:checked+label{
+  color:#000;
+}
+#newPrompt,
+#newPrompt button{
+  display:inline-block;
+  width:320px;
+  font-size:36px;
+  line-height:72px;
+  height:72px;
+  border-radius:36px;
+}
+#newPrompt{
+  box-shadow:0px 2px 5px 0px #779;
+}
+#newPrompt button{
+  background-color:#38f;
+  box-shadow:0px -5px 5px 0px #339 inset;
+  text-shadow:0px -1px 0px #66c;
+  color:#ddf;
+  transition:color 0.2s, background-color 0.1s, box-shadow 0.05s;
+}
+#newPrompt button:hover{
+  color:#fff;
+}
+#newPrompt button:active{
+  box-shadow:0px 5px 5px 0px #009 inset;
+  background-color:#06f;
+}

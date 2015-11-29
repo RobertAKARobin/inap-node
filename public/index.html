@@ -3,6 +3,7 @@
   <head>
     <title>INeedAPrompt</title>
     <link rel="stylesheet" href="styles.css" />
+    <base target="_blank" />
     <script src="ineedaprompt.js"></script>
     <script>
 var h = (function helpers(){
@@ -14,6 +15,15 @@ var h = (function helpers(){
     if(e instanceof NodeList && e.length === 1) e = e[0];
     return e;
   }
+  h.ajax = function(path, callback){
+    var http = new XMLHttpRequest();
+    http.open("GET", path, true);
+    http.onreadystatechange = function(){
+      if(this.readyState !== 4 || this.status !== 200) return;
+      callback(JSON.parse(this.responseText));
+    }
+    http.send();
+  }
   h.eachIn = ineedaprompt.helpers.eachIn;
   h.collect = ineedaprompt.helpers.collect;
   return h;
@@ -22,22 +32,26 @@ window.onload = function(){
 
   (function placeDefaultWordTypes(){
     var wordTypes = ineedaprompt.default();
-    var list = h.el("#types")
-    h.eachIn(wordTypes, function(type){
+    var container = h.el("#wordTypes")
+    h.eachIn(wordTypes, function(type, i){
+      var choice = document.createElement("LI");
       var input = document.createElement("INPUT");
       var label = document.createElement("LABEL");
+      var id = "choice" + i;
       input.type = "checkbox";
       input.value = type;
+      input.id = id;
       if(Math.random() > 0.5) input.checked = true;
       label.textContent = type;
-      label.appendChild(input);
-      list.appendChild(label);
+      label.htmlFor = id;
+      choice.appendChild(input);
+      choice.appendChild(label);
+      container.appendChild(choice);
     });
   }());
 
   (function listenToButton(){
-    var button = h.el("#submit");
-    button.addEventListener("click", loadPrompt);
+    h.el("#newPrompt").addEventListener("click", loadPrompt);
   }());
 
   function loadPrompt(){
@@ -45,9 +59,10 @@ window.onload = function(){
     var wordOrder = h.collect(inputs, function(input){
       if(input.checked) return input.value;
     });
-    ineedaprompt.getJSON("dictionary.json", function(dictionary){
-      var prompt = new ineedaprompt(wordOrder, dictionary).english();
-      h.el("#foo").textContent = prompt;
+    var promptUrl = "/api?q=" + wordOrder.join("+");
+    h.el("#apiLink").href = promptUrl;
+    h.ajax(promptUrl, function(response){
+      h.el("#promptOutput").textContent = response.prompt;
     });
   }
 
@@ -57,10 +72,21 @@ window.onload = function(){
     </script>
   </head>
   <body>
-    <h1 id="foo">Loading</h1>
-    <form>
-      <fieldset id="types"></fieldset>
-      <button type="button" id="submit">Again!</button>
-    </form>
+    <main>
+      <form>
+        <h1 id="newPrompt"><button type="button">I need a prompt!</button></h1>
+        <ul id="wordTypes" class="links"></ul>
+      </form>
+      <div class="plaque">
+        <blockquote id="promptOutput">Loading</blockquote>
+      </div>
+    </main>
+    <footer>
+      <ul class="links">
+        <li><a id="apiLink" href="/api">API</a></li>
+        <li><a href="http://github.com/robertakarobin/inap-node">Github</a></li>
+        <li><a href="http://robertakarobin.com">RobertAKARobin</a></li>
+      </ul>
+    </footer>
   </body>
 </html>
