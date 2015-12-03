@@ -52,16 +52,21 @@ main{
 
 #promptPlaque{
   margin:70px auto;
+  color:#777;
 }
 #promptPlaque h2{
-  color:#777;
   text-decoration:underline;
+}
+#promptPlaque aside a{
+  display:inline-block;
+  padding:0 10px;
+  font-size:12px;
 }
 #promptOutput{
   font-size:36px;
   line-height:48px;
   color:#222;
-  padding:0 10px;
+  padding:20px 10px;
 }
 
 .plaque,
