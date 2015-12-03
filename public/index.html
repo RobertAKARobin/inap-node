@@ -57,24 +57,24 @@ window.onload = function(){
     h.el("#newPrompt").addEventListener("click", loadPrompt);
   }());
 
-  function loadPrompt(){
-    var inputs = h.el("form input");
-    var wordOrder = h.collect(inputs, function(input){
-      if(input.checked) return input.value;
-    });
-    var promptUrl = "/api?q=" + wordOrder.join("+");
-    h.el("#apiLink").href = promptUrl;
-    h.ajax(promptUrl, function(response){
-      var queryParam = response.prompt.replace(/ /g, "+");
-      h.el("#promptNum").textContent = h.commaNum(response.count);
-      h.el("#promptOutput").textContent = response.prompt;
-      h.el("#reddit").href = "https://www.reddit.com/r/ineedaprompt/submit?selftext=true&title=" + queryParam;
-      h.el("#twitter").href = "https://twitter.com/intent/tweet?text=%23ineedaprompt%20" + queryParam;
-    });
-  }
-
   loadPrompt();
 
+}
+
+function loadPrompt(){
+  var inputs = h.el("form input");
+  var wordOrder = h.collect(inputs, function(input){
+    if(input.checked) return input.value;
+  });
+  var promptUrl = "/api?q=" + wordOrder.join("+");
+  h.el("#apiLink").href = promptUrl;
+  h.ajax(promptUrl, function(response){
+    var queryParam = response.prompt.replace(/ /g, "+");
+    h.el("#promptNum").textContent = h.commaNum(response.count);
+    h.el("#promptOutput").textContent = response.prompt;
+    h.el("#reddit").href = "https://www.reddit.com/r/ineedaprompt/submit?selftext=true&title=" + queryParam;
+    h.el("#twitter").href = "https://twitter.com/intent/tweet?text=%23ineedaprompt%20" + queryParam;
+  });
 }
     </script>
   </head>

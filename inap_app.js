@@ -4,12 +4,19 @@ var path = require("path");
 var inap = require("./public/ineedaprompt");
 var dictionary = require("./public/dictionary");
 
-var counter = require("./counter/function.js");
-
 (function setStaticServer(){
   var publicPath = path.join(__dirname, "/public");
   var serveStaticMethod = express.static(publicPath);
   app.use(serveStaticMethod);
+}());
+
+var counter;
+(function startCounter(){
+  var Counter = require("./counter/function.js");
+  counter = new Counter("./public/counter.txt");
+  counter.load(function(){
+    setInterval(counter.write.bind(counter), (3 * 1000));
+  });
 }());
 
 app.get("/", function(req, res){
@@ -25,9 +32,8 @@ app.get("/api", function(req, res){
   }catch(e){
     return res.json({success: false, error: e});
   }
-  counter(function(count){
-    res.json({success: true, prompt: prompt, count: count});
-  });
+  counter.count = counter.count + 1;
+  res.json({success: true, prompt: prompt, count: counter.count});
 });
 
 app.listen(3001, function(){
