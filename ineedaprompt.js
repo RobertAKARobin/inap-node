@@ -31,5 +31,5 @@ app.get("/api", function(req, res){
 });
 
 app.listen(3001, function(){
-  console.log("All systems go on port 3000.");
+  console.log("All systems go on port 3001.");
 });

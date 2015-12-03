@@ -24,6 +24,9 @@ var h = (function helpers(){
     }
     http.send();
   }
+  h.commaNum = function(num){
+    return num.toString().split("").reverse().join("").replace(/(.{3})/g, "$1,").split("").reverse().join("");
+  }
   h.eachIn = ineedaprompt.helpers.eachIn;
   h.collect = ineedaprompt.helpers.collect;
   return h;
@@ -63,7 +66,7 @@ window.onload = function(){
     h.el("#apiLink").href = promptUrl;
     h.ajax(promptUrl, function(response){
       var queryParam = response.prompt.replace(/ /g, "+");
-      h.el("#promptNum").textContent = response.count;
+      h.el("#promptNum").textContent = h.commaNum(response.count);
       h.el("#promptOutput").textContent = response.prompt;
       h.el("#reddit").href = "https://www.reddit.com/r/ineedaprompt/submit?selftext=true&title=" + queryParam;
       h.el("#twitter").href = "https://twitter.com/intent/tweet?text=%23ineedaprompt%20" + queryParam;
