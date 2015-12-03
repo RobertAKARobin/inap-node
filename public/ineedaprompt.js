@@ -18,15 +18,20 @@ ineedaprompt.prepositions = ["aboard", "about", "above", "across", "after", "aga
 ineedaprompt.helpers = (function(){
   var h = {};
   h.eachIn = function(collection, callback){
-    var i, l, value, key, keys, clazz = collection.constructor.name.toLowerCase();
-    if(clazz === "number") l = collection;
-    else{
-      keys = (clazz === "array") ? collection : Object.keys(collection);
+    var i, l, value, key, keys;
+    if(collection instanceof Number){
+      l = collection.length;
+    }else{
+      if((collection instanceof Array) || (collection instanceof NodeList)){
+        keys = collection;
+      }else{
+        keys = Object.keys(collection);
+      }
       l = keys.length;
     }
     for(i = 0; i < l; i++){
-      key = (clazz === "object") ? keys[i] : i;
-      value = (clazz === "number") ? key : collection[key];
+      key = (collection instanceof Object) ? i : keys[i];
+      value = (collection instanceof Number) ? key : collection[key];
       if(callback(value, key, collection) === "break") return key;
     }
     return -1;
