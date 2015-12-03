@@ -4,6 +4,8 @@ var path = require("path");
 var inap = require("./public/ineedaprompt");
 var dictionary = require("./public/dictionary");
 
+var counter = require("./counter/function.js");
+
 (function setStaticServer(){
   var publicPath = path.join(__dirname, "/public");
   var serveStaticMethod = express.static(publicPath);
@@ -23,7 +25,9 @@ app.get("/api", function(req, res){
   }catch(e){
     return res.json({success: false, error: e});
   }
-  return res.json({success: true, prompt: prompt});
+  counter(function(count){
+    res.json({success: true, prompt: prompt, count: count});
+  });
 });
 
 app.listen(3000, function(){
