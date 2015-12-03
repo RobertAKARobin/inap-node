@@ -51,7 +51,6 @@ main{
 }
 
 #promptPlaque{
-  margin:70px auto;
   color:#777;
 }
 #promptPlaque h2{
@@ -78,6 +77,7 @@ main{
 .plaque{
   position:relative;
   background-color:rgba(0,0,0,0.1);
+  margin:70px auto;
 }
 .plaque:before,
 .plaque:after{
@@ -88,6 +88,7 @@ main{
   background-repeat:no-repeat;
   background-size:100% auto;
   height:70px;
+  z-index:-1;
 }
 .plaque:before{
   top:-70px;
@@ -98,6 +99,12 @@ main{
   bottom:-70px;
   background-image:url("images/plaque_b.png");
   background-position:top center;
+}
+@media (max-width:480px){
+  .plaque{
+    margin-top:30px;
+    margin-bottom:50px;
+  }
 }
 
 .links{
