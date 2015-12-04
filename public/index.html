@@ -7,6 +7,7 @@
     <base target="_blank" />
     <script src="ineedaprompt.js"></script>
     <script>
+var els = {};
 var h = (function helpers(){
   var h = {};
   h.el = function(str){
@@ -26,13 +27,21 @@ var h = (function helpers(){
     http.send();
   }
   h.commaNum = function(num){
-    return num.toString().split("").reverse().join("").replace(/(.{3})/g, "$1,").split("").reverse().join("");
+    if(num.toString().length < 4) return num;
+    else return num.toString().split("").reverse().join("").replace(/(.{3})/g, "$1,").split("").reverse().join("");
   }
   h.eachIn = ineedaprompt.helpers.eachIn;
   h.collect = ineedaprompt.helpers.collect;
   return h;
 }());
 window.onload = function(){
+
+  (function setEls(){
+    var elIds = ["newPrompt", "promptNum", "promptOutput", "reddit", "twitter", "promptPlaque", "apiLink"];
+    h.eachIn(elIds, function(id){
+      els[id] = document.getElementById(id);
+    });
+  }());
 
   (function placeDefaultWordTypes(){
     var wordTypes = ineedaprompt.default();
@@ -55,26 +64,34 @@ window.onload = function(){
   }());
 
   (function listenToButton(){
-    h.el("#newPrompt").addEventListener("click", loadPrompt);
+    els.newPrompt.addEventListener("click", loadPrompt);
   }());
+
+  // Fade out text color
+  // Load new content
+  // Place new content
+  // Resize plaque
+  // Fade in text color
 
   loadPrompt();
 
 }
 
 function loadPrompt(){
+  var plaque = els.promptPlaque;
   var inputs = h.el("form input");
   var wordOrder = h.collect(inputs, function(input){
     if(input.checked) return input.value;
   });
   var promptUrl = "/api?q=" + wordOrder.join("+");
-  h.el("#apiLink").href = promptUrl;
+  els.apiLink.href = promptUrl;
   h.ajax(promptUrl, function(response){
     var queryParam = response.prompt.replace(/ /g, "+");
-    h.el("#promptNum").textContent = h.commaNum(response.count);
-    h.el("#promptOutput").textContent = response.prompt;
-    h.el("#reddit").href = "https://www.reddit.com/r/ineedaprompt/submit?selftext=true&title=" + queryParam;
-    h.el("#twitter").href = "https://twitter.com/intent/tweet?text=%23ineedaprompt%20" + queryParam;
+    els.promptNum.textContent = h.commaNum(response.count);
+    els.promptOutput.textContent = response.prompt;
+    els.reddit.href = "https://www.reddit.com/r/ineedaprompt/submit?selftext=true&title=" + queryParam;
+    els.twitter.href = "https://twitter.com/intent/tweet?text=%23ineedaprompt%20" + queryParam;
+    plaque.className = "plaque on";
   });
 }
     </script>
@@ -86,9 +103,11 @@ function loadPrompt(){
         <ul id="wordTypes" class="links"></ul>
       </form>
       <div class="plaque" id="promptPlaque">
-        <h2>Prompt &num;<span id="promptNum">1</span>:</h2>
-        <blockquote id="promptOutput">Loading</blockquote>
+        <h2>Prompt &num;<span id="promptNum">1</span></h2>
+        <blockquote id="promptOutput"></blockquote>
         <aside><a id="reddit">Post to /r/ineedaprompt</a><a id="twitter">Tweet it: &num;ineedaprompt</a></aside>
+      </div>
+      <div>
       </div>
     </main>
     <footer>
