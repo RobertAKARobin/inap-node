@@ -1,12 +1,14 @@
+"use strict";
+
 window.onload = function(){
 
   var h = helpers();
-  var els = setEls(["newPrompt", "promptNum", "promptOutput", "reddit", "twitter", "promptPlaque", "apiLink"]);
+  var els = getEls(["wordTypes", "newPrompt", "promptNum", "promptOutput", "reddit", "twitter", "promptPlaque", "apiLink"]);
   placeDefaultWordTypes();
   els.newPrompt.addEventListener("click", loadPrompt);
   loadPrompt();
 
-  function setEls(elIds){
+  function getEls(elIds){
     var els = {};
     h.eachIn(elIds, function(id){
       els[id] = document.getElementById(id);
@@ -15,22 +17,13 @@ window.onload = function(){
   }
 
   function placeDefaultWordTypes(){
-    var wordTypes = ineedaprompt.default();
-    var container = h.el("#wordTypes")
-    h.eachIn(wordTypes, function(type, i){
-      var choice = document.createElement("LI");
-      var input = document.createElement("INPUT");
-      var label = document.createElement("LABEL");
-      var id = "choice" + i;
-      input.type = "checkbox";
-      input.value = type;
-      input.id = id;
-      if(Math.random() > 0.5) input.checked = true;
-      label.textContent = type;
-      label.htmlFor = id;
-      choice.appendChild(input);
-      choice.appendChild(label);
-      container.appendChild(choice);
+    var template = els["wordTypes"].querySelector("li");
+    var types = ineedaprompt.default;
+    var out = h.templatify(template, types, function(type, el, i){
+      return { type: type, index: i }
+    });
+    h.eachIn(out, function(el){
+      if(Math.random() > 0.5) el.querySelector("input").checked = true;
     });
   }
 
@@ -78,6 +71,24 @@ window.onload = function(){
       return h.collect(inputs, function(input){
         if(input.checked) return input.value;
       });
+    }
+    h.templatify = function(template, collection, formatted){
+      var container = template.parentElement;
+      var output = [];
+      h.eachIn(collection, function(item, index){
+        var el = template.cloneNode(true);
+        var input = formatted(item, el, index);
+        var elHtml = el.innerHTML;
+        h.eachIn(Object.keys(input), function(key){
+          var rx = new RegExp("{{"+ key + "}}", "g");
+          elHtml = elHtml.replace(rx, input[key] || "");
+        });
+        el.innerHTML = elHtml;
+        output.push(el);
+        container.appendChild(el);
+      });
+      container.removeChild(template);
+      return output;
     }
     h.eachIn = ineedaprompt.helpers.eachIn;
     h.collect = ineedaprompt.helpers.collect;

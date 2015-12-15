@@ -11,9 +11,9 @@ function ineedaprompt(wordOrder, dictionary){
 ineedaprompt.wordTypes = [
   "noun", "adjective", "adverb", "verb", "location"
 ]
-ineedaprompt.default = function(){
-  return ["adjective", "adjective", "noun", "adverb", "verb", "adjective", "adjective", "noun", "location"];
-}
+ineedaprompt.default = [
+  "adjective", "adjective", "noun", "adverb", "verb", "adjective", "adjective", "noun", "location"
+];
 ineedaprompt.prepositions = ["aboard", "about", "above", "across", "after", "against", "along", "alongside", "amid", "among", "anti", "around", "as", "at", "before", "behind", "below", "beneath", "beside", "besides", "between", "beyond", "but", "by", "concerning", "considering", "despite", "down", "during", "except", "excepting", "excluding", "following", "for", "from", "in", "inside", "into", "like", "minus", "near", "of", "off", "on", "onto", "opposite", "outside", "over", "past", "per", "plus", "regarding", "round", "save", "since", "than", "through", "to", "toward", "towards", "under", "underneath", "unlike", "until", "up", "upon", "versus", "via", "with", "within", "without"];
 ineedaprompt.helpers = (function(){
   var h = {};
