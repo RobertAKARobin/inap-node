@@ -2,12 +2,17 @@
 
 window.onload = function(){
 
+  var dictionary;
   var h = helpers();
+  var v = viewHelpers();
   var els = getEls(["wordTypes", "wordColumns", "newPrompt", "promptNum", "promptOutput", "reddit", "twitter", "promptPlaque", "apiLink"]);
   placeDefaultWordTypes();
-  els.newPrompt.addEventListener("click", loadPrompt);
-  loadPrompt();
-  placeWordColumns();
+  els["newPrompt"].addEventListener("click", createPrompt);
+  v.ajax("dictionary.json", function(response){
+    dictionary = response;
+    createPrompt();
+    // placeWordColumns();
+  });
 
   function getEls(elIds){
     var els = {};
@@ -20,7 +25,7 @@ window.onload = function(){
   function placeDefaultWordTypes(){
     var template = els["wordTypes"].querySelector("li");
     var types = ineedaprompt.default;
-    var out = h.templatify(template, types, function(index, type, el){
+    var out = v.templatify(template, types, function(index, type, el){
       return { type: type, index: index }
     });
     out.forEach(function(el){
@@ -28,42 +33,34 @@ window.onload = function(){
     });
   }
 
-  function placeWordColumns(){
-    h.ajax("dictionary.json", function(dictionary){
-      var template = els["wordColumns"].querySelector("div");
-      h.templatify(template, dictionary, function(type, list, el){
-        return {type: type, words: "- " + list.join("\n- ")}
-      })
-    });
-  }
-
-  function loadPrompt(){
-    var wordOrder = h.getChecks("form input");
-    var promptUrl = "/api?q=" + wordOrder.join("+");
-    els.apiLink.href = promptUrl;
-    h.ajax(promptUrl, placePrompt);
-  }
-
-  function placePrompt(apiResponse){
-    var plaque = els.promptPlaque;
-    var queryParam = apiResponse.prompt.replace(/ /g, "+");
-    els.promptNum.textContent = h.commaNum(apiResponse.count);
-    els.promptOutput.textContent = apiResponse.prompt;
-    els.reddit.href = "https://www.reddit.com/r/ineedaprompt/submit?selftext=true&title=" + queryParam;
-    els.twitter.href = "https://twitter.com/intent/tweet?text=%23ineedaprompt%20" + queryParam;
+  function createPrompt(){
+    var wordOrder = v.getChecks("form input");
+    var plaque = els["promptPlaque"];
+    var prompt = new ineedaprompt(wordOrder, dictionary).english();
+    var queryParam = prompt.replace(/ /g, "+");
+    els["promptOutput"].textContent = prompt;
+    els["reddit"].href = "https://www.reddit.com/r/ineedaprompt/submit?selftext=true&title=" + queryParam;
+    els["twitter"].href = "https://twitter.com/intent/tweet?text=%23ineedaprompt%20" + queryParam;
     plaque.className = "plaque on";
   }
 
-  function helpers(){
-    var h = {};
-    h.el = function(str){
+  function placeWordColumns(){
+    var template = els["wordColumns"].querySelector("div");
+    v.templatify(template, dictionary, function(type, list, el){
+      return {type: type, words: "- " + list.join("\n- ")}
+    })
+  }
+
+  function viewHelpers(){
+    var v = {};
+    v.el = function(str){
       var e = {}, d = document;
       if(str.charAt(0) === "#") e = d.getElementById(str.substring(1));
       else e = d.querySelectorAll(str);
       if(e instanceof NodeList && e.length === 1) e = e[0];
       return e;
     }
-    h.ajax = function(path, callback){
+    v.ajax = function(path, callback){
       var http = new XMLHttpRequest();
       http.open("GET", path, true);
       http.onreadystatechange = function(){
@@ -72,17 +69,13 @@ window.onload = function(){
       }
       http.send();
     }
-    h.commaNum = function(num){
-      if(num.toString().length < 4) return num;
-      else return num.toString().split("").reverse().join("").replace(/(.{3})/g, "$1,").split("").reverse().join("");
-    }
-    h.getChecks = function(selector){
-      var inputs = h.el(selector);
+    v.getChecks = function(selector){
+      var inputs = v.el(selector);
       return h.collect(inputs, function(input){
         if(input.checked) return input.value;
       });
     }
-    h.templatify = function(template, collection, formatted){
+    v.templatify = function(template, collection, formatted){
       var container = template.parentElement;
       var output = [], key;
       for(key in collection){
@@ -100,8 +93,7 @@ window.onload = function(){
       container.removeChild(template);
       return output;
     }
-    h.collect = ineedaprompt.helpers.collect;
-    return h;
+    return v;
   }
 
 }

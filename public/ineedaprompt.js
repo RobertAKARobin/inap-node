@@ -1,9 +1,14 @@
 "use strict";
 
-if(typeof module !== 'undefined') module.exports = ineedaprompt;
+var h;
+if(typeof module !== 'undefined'){
+  h = require("./helpers");
+  module.exports = ineedaprompt;
+}else{
+  h = helpers();
+}
 
 function ineedaprompt(wordOrder, dictionary){
-  var h = ineedaprompt.helpers;
   var instance = this;
   instance.wordOrder = wordOrder || [];
   instance.dictionary = dictionary || {};
@@ -15,61 +20,9 @@ ineedaprompt.default = [
   "adjective", "adjective", "noun", "adverb", "verb", "adjective", "adjective", "noun", "location"
 ];
 ineedaprompt.prepositions = ["aboard", "about", "above", "across", "after", "against", "along", "alongside", "amid", "among", "anti", "around", "as", "at", "before", "behind", "below", "beneath", "beside", "besides", "between", "beyond", "but", "by", "concerning", "considering", "despite", "down", "during", "except", "excepting", "excluding", "following", "for", "from", "in", "inside", "into", "like", "minus", "near", "of", "off", "on", "onto", "opposite", "outside", "over", "past", "per", "plus", "regarding", "round", "save", "since", "than", "through", "to", "toward", "towards", "under", "underneath", "unlike", "until", "up", "upon", "versus", "via", "with", "within", "without"];
-ineedaprompt.helpers = (function(){
-  var h = {};
-  h.eachIn = function(collection, callback){
-    var i, l, value, key, keys;
-    if(collection instanceof Number){
-      l = collection.length;
-    }else{
-      if((collection instanceof Array) || (collection instanceof NodeList)){
-        keys = collection;
-      }else{
-        keys = Object.keys(collection);
-      }
-      l = keys.length;
-    }
-    for(i = 0; i < l; i++){
-      key = (collection instanceof Object) ? i : keys[i];
-      value = (collection instanceof Number) ? key : collection[key];
-      if(callback(value, key, collection) === "break") return key;
-    }
-    return -1;
-  }
-  h.findMatchInArray = function(value, comparators){
-    var indexOfMatch = h.eachIn(comparators, function(c){
-      if(h.hasSubstr(c, value) || h.hasSubstr(value, c)) return "break";
-    })
-    return comparators[indexOfMatch];
-  }
-  h.hasSubstr = function(out, inn){
-    return(out.toLowerCase().substring(0, inn.length) === inn.toLowerCase());
-  }
-  h.isIn = function(value, array){
-    var isIn = false;
-    h.eachIn(array, function(comparator){
-      if(value == comparator){ isIn = true; return "break"; }
-    });
-    return isIn;
-  }
-  h.randomValue = function(array){
-    var l = array.length;
-    return array[Math.floor(Math.random() * l)];
-  }
-  h.collect = function(array, callback){
-    var out = [];
-    h.eachIn(array, function(item, index){
-      var itemOut = callback(item, index);
-      if(itemOut !== undefined) out.push(itemOut);
-    });
-    return out;
-  }
-  return h;
-}());
 
 ineedaprompt.english = (function(){
   var e = {};
-  var h = ineedaprompt.helpers;
   var prepStripper = new RegExp("(" + ineedaprompt.prepositions.join("|") + ")$", "i");
   e.isTerminal = function(type){
     return h.isIn(type, ["noun", "verb", "location"]);
@@ -107,7 +60,6 @@ ineedaprompt.english = (function(){
 
 ineedaprompt.prototype = (function(){
   var p = {};
-  var h = ineedaprompt.helpers;
   var e = ineedaprompt.english;
   p.validateWordTypes = function(){
     var wordOrder = this.wordOrder, allowedWordTypes = ineedaprompt.wordTypes;
