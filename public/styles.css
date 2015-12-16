@@ -7,8 +7,8 @@
   text-decoration:none;
   font-family:inherit;
   font-style:normal;
-  font-size:16px;
-  line-height:24px;
+  font-size:inherit;
+  line-height:inherit;
   color:inherit;
   background-color:transparent;
 }
@@ -187,4 +187,25 @@ main{
   box-shadow:0px 5px 5px 0px #009 inset;
   background-color:#06f;
   padding-top:10px;
+}
+
+#wordColumns{
+  padding-top:50px;
+  font-size:0;
+}
+#wordColumns>div{
+  display:inline-block;
+  width:20%;
+  font-size:12px;
+  box-sizing:border-box;
+  border-right:5px solid transparent;
+}
+#wordColumns>div:last-of-type{
+  border-right:none;
+}
+textarea{
+  resize:none;
+  display:block;
+  height:240px;
+  width:100%;
 }

@@ -3,14 +3,15 @@
 window.onload = function(){
 
   var h = helpers();
-  var els = getEls(["wordTypes", "newPrompt", "promptNum", "promptOutput", "reddit", "twitter", "promptPlaque", "apiLink"]);
+  var els = getEls(["wordTypes", "wordColumns", "newPrompt", "promptNum", "promptOutput", "reddit", "twitter", "promptPlaque", "apiLink"]);
   placeDefaultWordTypes();
   els.newPrompt.addEventListener("click", loadPrompt);
   loadPrompt();
+  placeWordColumns();
 
   function getEls(elIds){
     var els = {};
-    h.eachIn(elIds, function(id){
+    elIds.forEach(function(id){
       els[id] = document.getElementById(id);
     });
     return els;
@@ -19,11 +20,20 @@ window.onload = function(){
   function placeDefaultWordTypes(){
     var template = els["wordTypes"].querySelector("li");
     var types = ineedaprompt.default;
-    var out = h.templatify(template, types, function(type, el, i){
-      return { type: type, index: i }
+    var out = h.templatify(template, types, function(index, type, el){
+      return { type: type, index: index }
     });
-    h.eachIn(out, function(el){
+    out.forEach(function(el){
       if(Math.random() > 0.5) el.querySelector("input").checked = true;
+    });
+  }
+
+  function placeWordColumns(){
+    h.ajax("dictionary.json", function(dictionary){
+      var template = els["wordColumns"].querySelector("div");
+      h.templatify(template, dictionary, function(type, list, el){
+        return {type: type, words: "- " + list.join("\n- ")}
+      })
     });
   }
 
@@ -74,23 +84,22 @@ window.onload = function(){
     }
     h.templatify = function(template, collection, formatted){
       var container = template.parentElement;
-      var output = [];
-      h.eachIn(collection, function(item, index){
+      var output = [], key;
+      for(key in collection){
         var el = template.cloneNode(true);
-        var input = formatted(item, el, index);
+        var input = formatted(key, collection[key], el);
         var elHtml = el.innerHTML;
-        h.eachIn(Object.keys(input), function(key){
+        Object.keys(input).forEach(function(key){
           var rx = new RegExp("{{"+ key + "}}", "g");
           elHtml = elHtml.replace(rx, input[key] || "");
         });
         el.innerHTML = elHtml;
         output.push(el);
         container.appendChild(el);
-      });
+      }
       container.removeChild(template);
       return output;
     }
-    h.eachIn = ineedaprompt.helpers.eachIn;
     h.collect = ineedaprompt.helpers.collect;
     return h;
   }
