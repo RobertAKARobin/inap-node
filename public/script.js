@@ -3,8 +3,8 @@
 window.onload = function(){
 
   var dictionary;
-  var h = helpers();
   var v = viewHelpers();
+  var h = ineedaprompt.helpers;
   var els = getEls(["wordTypes", "wordColumns", "newPrompt", "promptNum", "promptOutput", "reddit", "twitter", "promptPlaque", "apiLink"]);
   placeDefaultWordTypes();
   els["newPrompt"].addEventListener("click", createPrompt);
