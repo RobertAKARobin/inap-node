@@ -10,8 +10,12 @@ window.onload = function(){
   placeDefaultWordTypes();
   els["newPrompt"].addEventListener("click", createPrompt);
   v.ajax("GET", "./" + dictionary + ".json", function(response){
-    placeWordColumns(response);
-    createPrompt();
+    if(response.error){
+      updatePlaque("Dictionary not found.");
+    }else{
+      placeWordColumns(response);
+      createPrompt();
+    }
   });
 
   function getEls(elIds){
@@ -57,16 +61,32 @@ window.onload = function(){
   function createPrompt(){
     var dictionary = getDictionary();
     var wordOrder = v.getChecks("form input");
-    var plaque = els["promptPlaque"];
     var prompt = new ineedaprompt(wordOrder, dictionary).english();
+    v.ajax("POST", "/", function(response){
+      updatePlaque(prompt, response.count);
+    });
+  }
+
+  function updatePlaque(prompt, count){
     var queryParam = prompt.replace(/ /g, "+");
     els["promptOutput"].textContent = prompt;
-    els["reddit"].href = "https://www.reddit.com/r/ineedaprompt/submit?selftext=true&title=" + queryParam;
-    els["twitter"].href = "https://twitter.com/intent/tweet?text=%23ineedaprompt%20" + queryParam;
-    v.ajax("POST", "/", function(response){
-      els["promptNum"].textContent = response.count;
-    });
-    plaque.className = "plaque on";
+    els["promptPlaque"].className = "plaque on";
+    if(count){
+      els["reddit"].href = reddit(queryParam);
+      els["twitter"].href = twitter(queryParam);
+      els["promptNum"].textContent = count;
+      document.body.className = "";
+    }else{
+      document.body.className = "promptonly";
+    }
+  }
+
+  function reddit(string){
+    return "https://www.reddit.com/r/ineedaprompt/submit?selftext=true&title=" + string;
+  }
+
+  function twitter(string){
+    return "https://twitter.com/intent/tweet?text=%23ineedaprompt+" + string;
   }
 
   function viewHelpers(){

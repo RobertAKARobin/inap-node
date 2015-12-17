@@ -85,6 +85,11 @@ main{
 #promptPlaque.on blockquote{
   opacity:1;
 }
+body.promptonly #promptPlaque h2,
+body.promptonly #promptPlaque aside,
+body.promptonly #wordColumns{
+  display:none;
+}
 
 .plaque,
 .plaque:before,

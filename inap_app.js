@@ -21,16 +21,6 @@ var counter;
   });
 }());
 
-app.get("/", function(req, res){
-  res.sendFile("index.html");
-});
-
-app.post("/", function(req, res){
-  // TODO Save number of times prompt has been generated
-  counter.count = counter.count + 1;
-  res.json({success: true, count: counter.count});
-});
-
 app.get("/api", function(req, res){
   var wordOrder = [], prompt;
   if(req.query.q) wordOrder = req.query.q.split(" ");
@@ -48,7 +38,7 @@ app.get("/:dictionary.json", function(req, res){
   var dictionary = req.params["dictionary"];
   var rx = RegExp(dictionary + "\.[a-zA-Z0-9]*\.json", "g");
   findFileIn("./dictionaries", rx, function(err, content){
-    if(err) return res.json({success: false, message: "Dictionary '" + dictionary + "' not found."});
+    if(err) return res.json({error: true, message: "Dictionary '" + dictionary + "' not found."});
     res.setHeader("Content-Type", "application/json");
     res.send(content);
   });
@@ -56,6 +46,16 @@ app.get("/:dictionary.json", function(req, res){
 
 app.post("/:name", function(req, res){
 
+});
+
+app.get("/:yo", function(req, res){
+  res.sendFile(path.join(__dirname, "/public/index.html"));
+});
+
+app.post("/", function(req, res){
+  // TODO Save number of times prompt has been generated
+  counter.count = counter.count + 1;
+  res.json({success: true, count: counter.count});
 });
 
 app.listen(3001, function(){
