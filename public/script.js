@@ -60,7 +60,7 @@ window.onload = function(){
 
   function createPrompt(){
     var dictionary = getDictionary();
-    var wordOrder = v.getChecks("form input");
+    var wordOrder = v.getChecks("#wordTypes input");
     var prompt = new ineedaprompt(wordOrder, dictionary).english();
     v.ajax("POST", "/", function(response){
       updatePlaque(prompt, response.count);
@@ -93,7 +93,9 @@ window.onload = function(){
     var v = {};
     v.el = function(str){
       var e = {}, d = document;
-      if(str.charAt(0) === "#") e = d.getElementById(str.substring(1));
+      if(str.charAt(0) === "#" && !(/\s/g.test(str))){
+        e = d.getElementById(str.substring(1));
+      }
       else e = d.querySelectorAll(str);
       if(e instanceof NodeList && e.length === 1) e = e[0];
       return e;

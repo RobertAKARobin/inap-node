@@ -12,7 +12,7 @@
   color:inherit;
   background-color:transparent;
 }
-a, label, button{
+a, label, button, input[type=submit]{
   cursor:pointer;
 }
 html{
@@ -47,7 +47,7 @@ blockquote:after{
   content:"\201d";
 }
 main{
-  padding-top:36px;
+  padding:15px 0;
 }
 
 #promptPlaque{
@@ -87,7 +87,8 @@ main{
 }
 body.promptonly #promptPlaque h2,
 body.promptonly #promptPlaque aside,
-body.promptonly #wordColumns{
+body.promptonly #wordColumns,
+body.promptonly #wordTypes{
   display:none;
 }
 
@@ -123,12 +124,6 @@ body.promptonly #wordColumns{
   background-image:url("images/plaque_b.png");
   background-position:top center;
 }
-@media (max-width:480px){
-  .plaque{
-    margin-top:30px;
-    margin-bottom:50px;
-  }
-}
 
 .links{
   margin:12px auto;
@@ -137,10 +132,12 @@ body.promptonly #wordColumns{
   display:inline-block;
   vertical-align:bottom;
 }
+input[type=submit],
 .links label,
 .links a{
   border-radius:5px;
 }
+input[type=submit],
 .links label,
 .links a{
   color:#999;
@@ -148,11 +145,21 @@ body.promptonly #wordColumns{
   transition:color 0.15s, background-color 0.1s;
   -webkit-transition:color 0.15s, background-color 0.1s;
 }
+input[type=submit]:hover,
 .links label:hover,
 .links a:hover{
   background-color:rgba(0,0,0,0.1);
 }
 
+input[type="text"]{
+  background-color:#f9f9f9;
+  border-radius:5px;
+  padding:0.25em 1em;
+}
+
+#wordTypes{
+  margin:30px 0;
+}
 #wordTypes label{
   font-style:italic;
 }
@@ -194,8 +201,10 @@ body.promptonly #wordColumns{
   padding-top:10px;
 }
 
+#submit{
+  margin:25px 0;
+}
 #wordColumns{
-  padding-top:50px;
   font-size:0;
 }
 #wordColumns>div{
@@ -208,9 +217,48 @@ body.promptonly #wordColumns{
 #wordColumns>div:last-of-type{
   border-right:none;
 }
+h3{
+  text-align:left;
+}
 textarea{
   resize:none;
   display:block;
   height:240px;
   width:100%;
+}
+#dictionaryForm{
+  color:#999;
+  transition:color 0.2s;
+  -webkit-transition:color 0.2s;
+}
+#dictionaryForm:hover{
+  color:#333;
+}
+
+@media (max-width:480px){
+  .plaque{
+    margin-top:30px;
+    margin-bottom:50px;
+  }
+  textarea,
+  #wordColumns>div,
+  input[type=text],
+  input[type=submit]{
+    display:block;
+    border-right:0;
+    width:100%;
+    box-sizing:border-box;
+  }
+  input[type=submit]{
+    background-color:#fff;
+  }
+  textarea{
+    font-size:14px;
+    height:150px;
+    resize:vertical;
+    padding:5px 10px;
+    margin-top:28px;
+    background-color:#fff;
+    box-sizing:border-box;
+  }
 }

@@ -10,27 +10,34 @@
   </head>
   <body>
     <main>
-      <form>
-        <h1 id="newPrompt"><button type="button">I need a prompt!</button></h1>
-        <ul id="wordTypes" class="links">
-          <li>
-            <input type="checkbox" value="{{type}}" id="choice_{{index}}" />
-            <label for="choice_{{index}}">{{type}}</label>
-          </li>
-        </ul>
-      </form>
       <div class="plaque" id="promptPlaque">
         <h2>Prompt &num;<span id="promptNum">1</span></h2>
         <blockquote id="promptOutput"></blockquote>
         <aside><a id="reddit">Post to /r/ineedaprompt</a><a id="twitter">Tweet it: &num;ineedaprompt</a></aside>
       </div>
-      <div id="wordColumns">
-        <div>
-          <h3>{{type}}</h3>
-          <textarea data-word-type="{{type}}">{{words}}</textarea>
-        </div>
-      </div>
     </main>
+    <header>
+      <h1 id="newPrompt"><button type="button">I need a prompt!</button></h1>
+      <ul id="wordTypes" class="links">
+        <li>
+          <input type="checkbox" value="{{type}}" id="choice_{{index}}" />
+          <label for="choice_{{index}}">{{type}}</label>
+        </li>
+      </ul>
+      <form id="dictionaryForm" method="post" action="/">
+        <div id="wordColumns">
+          <div>
+            <h3>{{type}}s:</h3>
+            <textarea name="{{type}}" data-word-type="{{type}}">{{words}}</textarea>
+          </div>
+        </div>
+        <div id="submit">
+          <input type="text" name="dictionary" placeholder="Dictionary name" />
+          <input type="text" name="password" placeholder="Password" />
+          <input type="submit" value="Submit" />
+        </div>
+      </form>
+    </header>
     <footer>
       <ul class="links">
         <li><a id="apiLink" href="/api">API</a></li>
