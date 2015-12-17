@@ -87,7 +87,7 @@ main{
 }
 body.promptonly #promptPlaque h2,
 body.promptonly #promptPlaque aside,
-body.promptonly #wordColumns,
+body.promptonly #dictionaryForm,
 body.promptonly #wordTypes{
   display:none;
 }
@@ -201,10 +201,8 @@ input[type="text"]{
   padding-top:10px;
 }
 
-#submit{
-  margin:25px 0;
-}
 #wordColumns{
+  margin:25px 0;
   font-size:0;
 }
 #wordColumns>div{
@@ -221,10 +219,12 @@ h3{
   text-align:left;
 }
 textarea{
-  resize:none;
+  resize:vertical;
   display:block;
-  height:240px;
+  height:150px;
   width:100%;
+  border:1px dotted #ddd;
+  border-width:0 1px 1px 0;
 }
 #dictionaryForm{
   color:#999;
@@ -254,8 +254,6 @@ textarea{
   }
   textarea{
     font-size:14px;
-    height:150px;
-    resize:vertical;
     padding:5px 10px;
     margin-top:28px;
     background-color:#fff;

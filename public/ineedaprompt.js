@@ -68,6 +68,13 @@ ineedaprompt.helpers = (function(){
     if(num.toString().length < 4) return num;
     else return num.toString().split("").reverse().join("").replace(/(.{3})/g, "$1,").split("").reverse().join("");
   }
+  h.splitList = function(text){
+    var list = text.split(/\n/);
+    h.eachIn(list, function(word, i){
+      list[i] = word.replace(/^[-\s]*/, "").trim();
+    });
+    return list;
+  }
   return h;
 }());
 

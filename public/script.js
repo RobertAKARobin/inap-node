@@ -6,13 +6,16 @@ window.onload = function(){
   var h = ineedaprompt.helpers;
   var dictionary = location.pathname.substring(1) || "default";
   var columns = {};
-  var els = getEls(["wordTypes", "wordColumns", "newPrompt", "promptNum", "promptOutput", "reddit", "twitter", "promptPlaque", "apiLink"]);
+  var els = getEls(["wordTypes", "wordColumns", "newPrompt", "promptNum", "promptOutput", "reddit", "twitter", "promptPlaque", "apiLink", "dictionaryName", "dictionaryForm"]);
   placeDefaultWordTypes();
   els["newPrompt"].addEventListener("click", createPrompt);
   v.ajax("GET", "./" + dictionary + ".json", function(response){
     if(response.error){
       updatePlaque("Dictionary not found.");
     }else{
+      if(dictionary !== "default"){
+        els["dictionaryName"].value = dictionary;
+      }
       placeWordColumns(response);
       createPrompt();
     }
@@ -49,11 +52,7 @@ window.onload = function(){
     var texts = document.querySelector("#wordColumns").querySelectorAll("textarea");
     h.eachIn(texts, function(textarea){
       var type = textarea.getAttribute("data-word-type");
-      var list = textarea.value.split(/\n/);
-      h.eachIn(list, function(word, i){
-        list[i] = word.replace(/^[-\s]*/, "").trim();
-      });
-      dictionary[type] = list;
+      dictionary[type] = h.splitList(textarea.value);
     });
     return dictionary;
   }

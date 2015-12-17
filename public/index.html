@@ -24,15 +24,15 @@
           <label for="choice_{{index}}">{{type}}</label>
         </li>
       </ul>
-      <form id="dictionaryForm" method="post" action="/">
+      <form id="dictionaryForm" target="_top" method="post" action="/dictionary">
         <div id="wordColumns">
           <div>
             <h3>{{type}}s:</h3>
             <textarea name="{{type}}" data-word-type="{{type}}">{{words}}</textarea>
           </div>
         </div>
-        <div id="submit">
-          <input type="text" name="dictionary" placeholder="Dictionary name" />
+        <div id="dictionaryInfo">
+          <input type="text" id="dictionaryName" name="dictionary" placeholder="Dictionary name" />
           <input type="text" name="password" placeholder="Password" />
           <input type="submit" value="Submit" />
         </div>
@@ -41,7 +41,6 @@
     <footer>
       <ul class="links">
         <li><a id="apiLink" href="/api">API</a></li>
-        <li><a href="dictionary.json">Dictionary</a></li>
         <li><a href="http://github.com/robertakarobin/inap-node">Github</a></li>
         <li><a href="http://robertakarobin.com">RobertAKARobin</a></li>
       </ul>
