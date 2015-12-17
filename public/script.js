@@ -5,13 +5,14 @@ window.onload = function(){
   var dictionary;
   var v = viewHelpers();
   var h = ineedaprompt.helpers;
+  var columns = {};
   var els = getEls(["wordTypes", "wordColumns", "newPrompt", "promptNum", "promptOutput", "reddit", "twitter", "promptPlaque", "apiLink"]);
   placeDefaultWordTypes();
   els["newPrompt"].addEventListener("click", createPrompt);
   v.ajax("dictionary.json", function(response){
     dictionary = response;
+    placeWordColumns();
     createPrompt();
-    // placeWordColumns();
   });
 
   function getEls(elIds){
@@ -33,7 +34,29 @@ window.onload = function(){
     });
   }
 
+  function placeWordColumns(){
+    var template = els["wordColumns"].querySelector("div");
+    columns = v.templatify(template, dictionary, function(type, list, el){
+      return {type: type, words: "- " + list.join("\n- ")}
+    });
+  }
+
+  function getDictionary(){
+    var dictionary = {}
+    var texts = document.querySelector("#wordColumns").querySelectorAll("textarea");
+    h.eachIn(texts, function(textarea){
+      var type = textarea.getAttribute("data-word-type");
+      var list = textarea.value.split(/\n/);
+      h.eachIn(list, function(word, i){
+        list[i] = word.replace(/^[-\s]*/, "").trim();
+      });
+      dictionary[type] = list;
+    });
+    return dictionary;
+  }
+
   function createPrompt(){
+    var dictionary = getDictionary();
     var wordOrder = v.getChecks("form input");
     var plaque = els["promptPlaque"];
     var prompt = new ineedaprompt(wordOrder, dictionary).english();
@@ -42,13 +65,6 @@ window.onload = function(){
     els["reddit"].href = "https://www.reddit.com/r/ineedaprompt/submit?selftext=true&title=" + queryParam;
     els["twitter"].href = "https://twitter.com/intent/tweet?text=%23ineedaprompt%20" + queryParam;
     plaque.className = "plaque on";
-  }
-
-  function placeWordColumns(){
-    var template = els["wordColumns"].querySelector("div");
-    v.templatify(template, dictionary, function(type, list, el){
-      return {type: type, words: "- " + list.join("\n- ")}
-    })
   }
 
   function viewHelpers(){
