@@ -23,12 +23,18 @@ app.get("/", function(req, res){
   res.sendFile("index.html");
 });
 
+app.post("/", function(req, res){
+  // TODO Save number of times prompt has been generated
+  counter.count = counter.count + 1;
+  res.json({success: true, count: counter.count});
+});
+
 app.get("/api", function(req, res){
-  var wordOrder = [];
+  var wordOrder = [], prompt;
   if(req.query.q) wordOrder = req.query.q.split(" ");
-  if(wordOrder.length < 1) wordOrder = inap.default();
+  if(wordOrder.length < 1) wordOrder = inap.default.slice();
   try{
-    var prompt = new inap(wordOrder, dictionary).english();
+    prompt = new inap(wordOrder, dictionary).english();
   }catch(e){
     return res.json({success: false, error: e});
   }

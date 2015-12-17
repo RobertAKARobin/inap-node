@@ -9,7 +9,7 @@ window.onload = function(){
   var els = getEls(["wordTypes", "wordColumns", "newPrompt", "promptNum", "promptOutput", "reddit", "twitter", "promptPlaque", "apiLink"]);
   placeDefaultWordTypes();
   els["newPrompt"].addEventListener("click", createPrompt);
-  v.ajax("dictionary.json", function(response){
+  v.ajax("GET", "dictionary.json", function(response){
     dictionary = response;
     placeWordColumns();
     createPrompt();
@@ -64,6 +64,9 @@ window.onload = function(){
     els["promptOutput"].textContent = prompt;
     els["reddit"].href = "https://www.reddit.com/r/ineedaprompt/submit?selftext=true&title=" + queryParam;
     els["twitter"].href = "https://twitter.com/intent/tweet?text=%23ineedaprompt%20" + queryParam;
+    v.ajax("POST", "/", function(response){
+      els["promptNum"].textContent = response.count;
+    });
     plaque.className = "plaque on";
   }
 
@@ -76,9 +79,9 @@ window.onload = function(){
       if(e instanceof NodeList && e.length === 1) e = e[0];
       return e;
     }
-    v.ajax = function(path, callback){
+    v.ajax = function(method, path, callback){
       var http = new XMLHttpRequest();
-      http.open("GET", path, true);
+      http.open(method, path, true);
       http.onreadystatechange = function(){
         if(this.readyState !== 4 || this.status !== 200) return;
         callback(JSON.parse(this.responseText));
