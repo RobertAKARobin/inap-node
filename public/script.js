@@ -2,16 +2,15 @@
 
 window.onload = function(){
 
-  var dictionary;
   var v = viewHelpers();
   var h = ineedaprompt.helpers;
+  var dictionary = location.pathname.substring(1) || "default";
   var columns = {};
   var els = getEls(["wordTypes", "wordColumns", "newPrompt", "promptNum", "promptOutput", "reddit", "twitter", "promptPlaque", "apiLink"]);
   placeDefaultWordTypes();
   els["newPrompt"].addEventListener("click", createPrompt);
-  v.ajax("GET", "dictionary.json", function(response){
-    dictionary = response;
-    placeWordColumns();
+  v.ajax("GET", "./" + dictionary + ".json", function(response){
+    placeWordColumns(response);
     createPrompt();
   });
 
@@ -34,7 +33,7 @@ window.onload = function(){
     });
   }
 
-  function placeWordColumns(){
+  function placeWordColumns(dictionary){
     var template = els["wordColumns"].querySelector("div");
     columns = v.templatify(template, dictionary, function(type, list, el){
       return {type: type, words: "- " + list.join("\n- ")}

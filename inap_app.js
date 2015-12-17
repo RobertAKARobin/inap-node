@@ -1,8 +1,10 @@
 var express = require("express");
 var app = express();
 var path = require("path");
+var fs = require("fs");
 var inap = require("./public/ineedaprompt");
-var dictionary = require("./public/dictionary");
+var h = inap.helpers;
+var dictionary = require("./dictionaries/default.default.json");
 
 (function setStaticServer(){
   var publicPath = path.join(__dirname, "/public");
@@ -42,6 +44,35 @@ app.get("/api", function(req, res){
   res.json({success: true, prompt: prompt, count: counter.count});
 });
 
+app.get("/:dictionary.json", function(req, res){
+  var dictionary = req.params["dictionary"];
+  var rx = RegExp(dictionary + "\.[a-zA-Z0-9]*\.json", "g");
+  findFileIn("./dictionaries", rx, function(err, content){
+    if(err) return res.json({success: false, message: "Dictionary '" + dictionary + "' not found."});
+    res.setHeader("Content-Type", "application/json");
+    res.send(content);
+  });
+});
+
+app.post("/:name", function(req, res){
+
+});
+
 app.listen(3001, function(){
   console.log("All systems go on port 3001.");
 });
+
+function findFileIn(directory, regex, callback){
+  var found = "";
+  fs.readdir(directory, function(err, files){
+    h.eachIn(files, function(file){
+      if(regex.test(file)){
+        found = file;
+        return "break";
+      }
+    });
+    fs.readFile(directory + "/" + found, "utf8", function(err, content){
+      callback(err, content, found);
+    });
+  });
+}
