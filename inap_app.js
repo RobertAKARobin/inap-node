@@ -35,7 +35,7 @@ app.get("/api", function(req, res){
     return res.json({success: false, error: e});
   }
   counter.count = counter.count + 1;
-  json({success: true, prompt: prompt, count: counter.count});
+  res.json({success: true, prompt: prompt, count: counter.count});
 });
 
 app.get("/:dictionary.json", function(req, res){
