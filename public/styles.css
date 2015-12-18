@@ -17,18 +17,115 @@ a, label, button, input[type=submit]{
 }
 html{
   font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
-  background-color:#eee;
+  font-size:14px;
+  background-color:#fff;
+  color:#999;
 }
 body{
-  max-width:800px;
-  margin:0 auto;
-  text-align:center;
-  color:#222;
+  display:flex;
+  align-content:stretch;
+  align-items:stretch;
+  flex-direction:row;
 }
-h1{
+#navTrigger{
+  width:50px;
+  height:100vh;
+  position:absolute;
+  top:0;
+  left:0;
+  padding:0;
+  border:0;
+  border-radius:0;
+  transition:left 0.2s;
+}
+nav{
+  min-height:100vh;
+  flex-basis:50px;
+  padding-left:50px;
+  overflow:hidden;
+  flex-shrink:0;
+  position:relative;
+  z-index:1000;
+  box-sizing:border-box;
+  transition:flex-basis 0.2s, padding-left 0.2s;
+}
+#navToggler:checked+nav{
+  flex-basis:300px;
+  padding-left:0px;
+}
+#navToggler:checked+nav #navTrigger{
+  left:-40px;
+}
+#mainBox{
+  flex-grow:1;
+}
+@media (max-width:640px){
+  body{
+    display:block;
+  }
+  nav{
+    width:300px;
+    position:fixed;
+    top:0;
+    right:0;
+    box-shadow:0px 0px 100px 2px #555;
+  }
+}
 
+#mainBox{
+  min-height:100vh;
+  padding:0px 10px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  box-sizing:border-box;
 }
-input[type=checkbox]{
+header, main, footer{
+  text-align:center;
+}
+header, footer{
+  padding:18px 0px;
+}
+
+#promptOutput{
+  font-size:48px;
+  line-height:58px;
+  border:10px solid #fff;
+  color:#000;
+  cursor:pointer;
+  opacity:1;
+  text-shadow:0px 3px 10px #ccc;
+  transition:opacity 0.2s, text-shadow 0.5s, color 0.3s;
+  -webkit-transition:opacity 0.2s, text-shadow 0.5s, color 0.3s;
+}
+#promptOutput:hover{
+  text-shadow:0 0 0 #fff;
+  color:#039;
+}
+#promptOutput:active{
+  opacity:0;
+}
+#promptOutput:before{
+  content:"\201c";
+}
+#promptOutput:after{
+  content:"\201d";
+}
+
+
+.links,
+#wordTypes{
+  font-size:0;
+}
+.links li,
+#wordTypes li{
+  font-size:1rem;
+  display:inline-block;
+}
+#wordTypes input,
+#navToggler{
+  display:block;
   position:absolute;
   top:0;
   left:0;
@@ -37,226 +134,72 @@ input[type=checkbox]{
   overflow:hidden;
   opacity:0.01;
 }
-button, label{
-  display:inline-block;
+label,
+.links a{
+  display:block;
+  line-height:1em;
+  padding:10px 15px;
+  border-radius:5px;
+  border:2px solid #fff;
+  background-color:rgba(0,0,0,0);
+  transition:background-color 0.2s;
+  -webkit-transition:background-color 0.2s;
 }
-blockquote:before{
-  content:"\201c";
+.links a:hover,
+label:hover,
+input:checked+label{
+  background-color:rgba(0,0,0,0.07);
 }
-blockquote:after{
-  content:"\201d";
-}
-main{
-  padding:15px 0;
-}
-
-#promptPlaque{
-  color:#777;
-}
-#promptPlaque h2{
+input:checked+label:hover{
   text-decoration:underline;
 }
-#promptPlaque aside a{
-  display:inline-block;
-  padding:0 10px;
-  font-size:12px;
-}
-#promptOutput{
-  font-size:36px;
-  line-height:48px;
-  color:#222;
-  padding:20px 10px;
-}
-#promptPlaque{
-  max-height:0px;
-  transition: max-height 1s;
-  -webkit-transition: max-height 1s;
-}
-#promptPlaque.on{
-  max-height:1000px;
-}
-#promptPlaque h2,
-#promptPlaque blockquote{
-  opacity:0;
-  transition:opacity 1s;
-  -webkit-transition:opacity 1s;
-}
-#promptPlaque.on h2,
-#promptPlaque.on blockquote{
-  opacity:1;
-}
-body.promptonly #promptPlaque h2,
-body.promptonly #promptPlaque aside,
-body.promptonly #dictionaryForm,
-body.promptonly #wordTypes{
-  display:none;
-}
 
-.plaque,
-.plaque:before,
-.plaque:after{
-  display:block;
-  width:100%;
-}
-.plaque{
-  position:relative;
-  background-color:rgba(0,0,0,0.1);
-  margin:70px auto;
-}
-.plaque:before,
-.plaque:after{
-  opacity:0.1;
-  content:" ";
-  display:block;
-  position:absolute;
-  background-repeat:no-repeat;
-  background-size:100% auto;
-  height:70px;
-  z-index:-1;
-}
-.plaque:before{
-  top:-70px;
-  background-image:url("images/plaque_t.png");
-  background-position:bottom center;
-}
-.plaque:after{
-  bottom:-70px;
-  background-image:url("images/plaque_b.png");
-  background-position:top center;
-}
-
-.links{
-  margin:12px auto;
-}
-.links li{
-  display:inline-block;
-  vertical-align:bottom;
-}
-input[type=submit],
-.links label,
-.links a{
-  border-radius:5px;
-}
-input[type=submit],
-.links label,
-.links a{
-  color:#999;
-  padding:0.25em 1em;
-  transition:color 0.15s, background-color 0.1s;
-  -webkit-transition:color 0.15s, background-color 0.1s;
-}
-input[type=submit]:hover,
-.links label:hover,
-.links a:hover{
-  background-color:rgba(0,0,0,0.1);
-}
-
-input[type="text"]{
-  background-color:#f9f9f9;
-  border-radius:5px;
-  padding:0.25em 1em;
-}
-
-#wordTypes{
-  margin:30px 0;
-}
-#wordTypes label{
-  font-style:italic;
-}
-#wordTypes input:checked+label{
-  color:#000;
-}
-#newPrompt,
-#newPrompt button{
-  display:inline-block;
-  width:320px;
-  font-size:36px;
-  line-height:72px;
-  height:72px;
-  border-radius:36px;
-}
-#newPrompt{
-  box-shadow:0px 2px 5px 0px #779;
-  transition: box-shadow 0.1s;
-  -webkit-transition: box-shadow 0.1s;
-}
-#newPrompt button{
-  background-color:#38f;
-  box-shadow:0px -5px 5px 0px #339 inset;
-  text-shadow:0px -1px 0px #66c;
-  color:#ddf;
-  padding-top:0;
-  transition:color 0.2s, background-color 0.1s, box-shadow 0.1s, padding-top 0.1s;
-  -webkit-transition:color 0.2s, background-color 0.1s, box-shadow 0.1s, padding-top 0.1s;
-}
-#newPrompt:active{
-  box-shadow:0px 0px 5px 0px #779;
-}
-#newPrompt:hover button{
-  color:#fff;
-}
-#newPrompt:active button{
-  box-shadow:0px 5px 5px 0px #009 inset;
-  background-color:#06f;
-  padding-top:10px;
-}
-
-#wordColumns{
-  margin:25px 0;
-  font-size:0;
-}
-#wordColumns>div{
-  display:inline-block;
-  width:20%;
-  font-size:12px;
-  box-sizing:border-box;
-  border-right:5px solid transparent;
-}
-#wordColumns>div:last-of-type{
-  border-right:none;
-}
-h3{
-  text-align:left;
-}
-textarea{
-  resize:vertical;
-  display:block;
-  height:150px;
-  width:100%;
-  border:1px dotted #ddd;
-  border-width:0 1px 1px 0;
-}
-#dictionaryForm{
-  color:#999;
-  transition:color 0.2s;
-  -webkit-transition:color 0.2s;
-}
-#dictionaryForm:hover{
+nav{
+  background-color:#d0d0d9;
   color:#333;
+  text-align:center;
 }
-
-@media (max-width:480px){
-  .plaque{
-    margin-top:30px;
-    margin-bottom:50px;
-  }
-  textarea,
-  #wordColumns>div,
-  input[type=text],
-  input[type=submit]{
-    display:block;
-    border-right:0;
-    width:100%;
-    box-sizing:border-box;
-  }
-  input[type=submit]{
-    background-color:#fff;
-  }
-  textarea{
-    font-size:14px;
-    padding:5px 10px;
-    margin-top:28px;
-    background-color:#fff;
-    box-sizing:border-box;
-  }
+#innerNavBox{
+  box-sizing:border-box;
+  padding:5px 10px;
+}
+nav ul{
+  list-style:none;
+}
+nav label{
+  border:none;
+}
+nav input,
+nav textarea{
+  display:block;
+  border-radius:5px;
+  width:100%;
+  overflow:hidden;
+  margin-bottom:10px;
+  background-color:#eee;
+  box-sizing:border-box;
+}
+nav textarea{
+  resize:none;
+  height:0px;
+  padding:0 5px;
+  transition:height 0.2s;
+}
+nav textarea:focus{
+  padding:2px 5px;
+  overflow-y:scroll;
+  height:100px;
+  resize:vertical;
+}
+nav input{
+  padding:5px;
+}
+nav input[type=submit]{
+  transition:background-color 0.2s;
+}
+nav input[type=submit]:hover{
+  background-color:rgba(0,0,0,0.1);
+}
+nav .links a{
+  border:0;
 }

@@ -8,7 +8,7 @@ window.onload = function(){
   var columns = {};
   var els = getEls(["wordTypes", "wordColumns", "newPrompt", "promptNum", "promptOutput", "reddit", "twitter", "promptPlaque", "apiLink", "dictionaryName", "dictionaryForm"]);
   placeDefaultWordTypes();
-  els["newPrompt"].addEventListener("click", createPrompt);
+  els["promptOutput"].addEventListener("click", createPrompt);
   v.ajax("GET", "./" + dictionary + ".json", function(response){
     if(response.error){
       updatePlaque("Dictionary not found.");
@@ -41,7 +41,7 @@ window.onload = function(){
   }
 
   function placeWordColumns(dictionary){
-    var template = els["wordColumns"].querySelector("div");
+    var template = els["wordColumns"].querySelector(".list");
     columns = v.templatify(template, dictionary, function(type, list, el){
       return {type: type, words: "- " + list.join("\n- ")}
     });
@@ -73,7 +73,7 @@ window.onload = function(){
     if(count){
       els["reddit"].href = reddit(queryParam);
       els["twitter"].href = twitter(queryParam);
-      els["promptNum"].textContent = count;
+      els["promptNum"].textContent = "Prompt #" + count;
       document.body.className = "";
     }else{
       document.body.className = "promptonly";

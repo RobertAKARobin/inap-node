@@ -9,41 +9,55 @@
     <script src="script.js"></script>
   </head>
   <body>
-    <main>
-      <div class="plaque" id="promptPlaque">
-        <h2>Prompt &num;<span id="promptNum">1</span></h2>
-        <blockquote id="promptOutput"></blockquote>
-        <aside><a id="reddit">Post to /r/ineedaprompt</a><a id="twitter">Tweet it: &num;ineedaprompt</a></aside>
-      </div>
-    </main>
-    <header>
-      <h1 id="newPrompt"><button type="button">I need a prompt!</button></h1>
-      <ul id="wordTypes" class="links">
-        <li>
-          <input type="checkbox" value="{{type}}" id="choice_{{index}}" />
-          <label for="choice_{{index}}">{{type}}</label>
-        </li>
-      </ul>
-      <form id="dictionaryForm" target="_top" method="post" action="/dictionary">
-        <div id="wordColumns">
-          <div>
-            <h3>{{type}}s:</h3>
-            <textarea name="{{type}}" data-word-type="{{type}}">{{words}}</textarea>
+    <div id="mainBox">
+      <header>
+        <h1 id="promptNum">I Need A Prompt</h1>
+      </header>
+      <main>
+        <div id="promptPlaque">
+          <blockquote id="promptOutput"></blockquote>
+          <aside>
+            <ul class="links">
+              <li><a id="twitter">&num;ineedaprompt</a></li>
+              <li><a id="reddit">r/ineedaprompt</a></li>
+            </ul>
+          </aside>
+        </div>
+      </main>
+      <footer>
+        <ul id="wordTypes">
+          <li>
+            <input type="checkbox" value="{{type}}" id="choice_{{index}}" />
+            <label for="choice_{{index}}">{{type}}</label>
+          </li>
+        </ul>
+      </footer>
+    </div>
+    <input id="navToggler" type="checkbox" />
+    <nav>
+      <label id="navTrigger" for="navToggler"></label>
+      <div id="innerNavBox">
+        <form id="dictionaryForm" target="_top" method="post" action="/dictionary">
+          <ul id="wordColumns">
+            <li class="list">
+              <h3><label for="{{type}}">{{type}}s</label></h3>
+              <textarea id="{{type}}" name="{{type}}" data-word-type="{{type}}">{{words}}</textarea>
+            </li>
+          </ul>
+          <div id="dictionaryInfo">
+            <input type="text" id="dictionaryName" name="dictionary" placeholder="Dictionary name" />
+            <input type="text" name="password" placeholder="Super-secure password" />
+            <input type="submit" value="Submit" />
           </div>
-        </div>
-        <div id="dictionaryInfo">
-          <input type="text" id="dictionaryName" name="dictionary" placeholder="Dictionary name" />
-          <input type="text" name="password" placeholder="Password" />
-          <input type="submit" value="Submit" />
-        </div>
-      </form>
-    </header>
-    <footer>
-      <ul class="links">
-        <li><a id="apiLink" href="/api">API</a></li>
-        <li><a href="http://github.com/robertakarobin/inap-node">Github</a></li>
-        <li><a href="http://robertakarobin.com">RobertAKARobin</a></li>
-      </ul>
-    </footer>
+        </form>
+
+        <ul class="links">
+          <li><a id="apiLink" href="/api">API</a></li>
+          <li><a href="http://github.com/robertakarobin/inap-node">Github</a></li>
+          <li><a href="http://robertakarobin.com">RobertAKARobin</a></li>
+          <li><a href="/">INeedAPrompt</a></li>
+        </ul>
+      </div>
+    </nav>
   </body>
 </html>
