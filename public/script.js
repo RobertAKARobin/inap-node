@@ -73,7 +73,7 @@ window.onload = function(){
     if(count){
       els["reddit"].href = reddit(queryParam);
       els["twitter"].href = twitter(queryParam);
-      els["promptNum"].textContent = "Prompt #" + count;
+      els["promptNum"].textContent = "Prompt #" + h.commaNum(count);
       document.body.className = "";
     }else{
       document.body.className = "promptonly";
