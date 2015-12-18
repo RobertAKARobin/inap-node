@@ -21,7 +21,7 @@ var counter;
   var Counter = require("./counter/function.js");
   counter = new Counter("./public/counter.txt");
   counter.load(function(){
-    setInterval(counter.write.bind(counter), (3 * 1000));
+    setInterval(counter.write.bind(counter), (10 * 1000));
   });
 }());
 
