@@ -9,6 +9,8 @@
     <script src="script.js"></script>
   </head>
   <body>
+    <input id="navToggler" type="checkbox" />
+    <label id="navTrigger" for="navToggler"></label>
     <div id="mainBox">
       <header>
         <h1 id="promptNum">I Need A Prompt</h1>
@@ -33,9 +35,7 @@
         </ul>
       </footer>
     </div>
-    <input id="navToggler" type="checkbox" />
     <nav>
-      <label id="navTrigger" for="navToggler"></label>
       <div id="innerNavBox">
         <form id="dictionaryForm" target="_top" method="post" action="/dictionary">
           <ul id="wordColumns">
