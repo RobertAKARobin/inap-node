@@ -69,15 +69,9 @@ window.onload = function(){
   function updatePlaque(prompt, count){
     var queryParam = prompt.replace(/ /g, "+");
     els["promptOutput"].textContent = prompt;
-    els["promptPlaque"].className = "plaque on";
-    if(count){
-      els["reddit"].href = reddit(queryParam);
-      els["twitter"].href = twitter(queryParam);
-      els["promptNum"].textContent = "Prompt #" + h.commaNum(count);
-      document.body.className = "";
-    }else{
-      document.body.className = "promptonly";
-    }
+    els["reddit"].href = reddit(queryParam);
+    els["twitter"].href = twitter(queryParam);
+    els["promptNum"].textContent = "Prompt #" + h.commaNum(count);
   }
 
   function reddit(string){
