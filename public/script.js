@@ -6,9 +6,9 @@ window.onload = function(){
   var h = ineedaprompt.helpers;
   var dictionary = location.pathname.substring(1) || "default";
   var columns = {};
-  var els = getEls(["wordTypes", "wordColumns", "newPrompt", "promptNum", "promptOutput", "reddit", "twitter", "promptPlaque", "apiLink", "dictionaryName", "dictionaryForm"]);
+  var els = getEls(["wordTypes", "wordColumns", "newPrompt", "promptNum", "promptNext", "promptOutput", "reddit", "twitter", "promptPlaque", "apiLink", "dictionaryName", "dictionaryForm"]);
   placeDefaultWordTypes();
-  els["promptOutput"].addEventListener("click", createPrompt);
+  els["promptNext"].addEventListener("click", createPrompt);
   v.ajax("GET", "./" + dictionary + ".json", function(response){
     if(response.error){
       updatePlaque("Dictionary not found.");
