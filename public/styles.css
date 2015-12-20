@@ -52,33 +52,6 @@ nav{
   transition:opacity 0.2s;
   -webkit-transition:opacity 0.2s;
 }
-@media (max-width: 640px){
-  #mainBox{
-    border-right:0px;
-  }
-  nav{
-    right:-300px;
-    transition:right 0.2s;
-    -webkit-transition:right 0.2s;
-  }
-  #navTrigger{
-    left:auto;
-    right:0px;
-    width:30px;
-    opacity:0.2;
-  }
-  #navTrigger:hover{
-    opacity:0.3;
-  }
-  #navToggler:checked+#navTrigger{
-    width:100%;
-    opacity:0.5;
-  }
-  #navToggler:checked+*+*+nav{
-    right:0px;
-    box-shadow:0px 0px 50px 1px #000;
-  }
-}
 
 #mainBox{
   min-height:100vh;
@@ -215,4 +188,36 @@ nav input[type=submit]:hover{
 }
 nav .links a{
   border:0;
+}
+
+@media (max-width: 640px){
+  #mainBox{
+    border-right:0px;
+  }
+  #promptOutput{
+    font-size:32px;
+    line-height:42px;
+  }
+  nav{
+    right:-300px;
+    transition:right 0.2s;
+    -webkit-transition:right 0.2s;
+  }
+  #navTrigger{
+    left:auto;
+    right:0px;
+    width:30px;
+    opacity:0.2;
+  }
+  #navTrigger:hover{
+    opacity:0.3;
+  }
+  #navToggler:checked+#navTrigger{
+    width:100%;
+    opacity:0.5;
+  }
+  #navToggler:checked+*+*+nav{
+    right:0px;
+    box-shadow:0px 0px 50px 1px #000;
+  }
 }
