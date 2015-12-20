@@ -6,7 +6,7 @@ window.onload = function(){
   var h = ineedaprompt.helpers;
   var dictionary = location.pathname.substring(1) || "default";
   var columns = {};
-  var els = getEls(["wordTypes", "wordColumns", "newPrompt", "promptNum", "promptNext", "promptOutput", "reddit", "twitter", "promptPlaque", "apiLink", "dictionaryName", "dictionaryForm"]);
+  var els = getEls(["wordTypes", "jsonLink", "wordColumns", "newPrompt", "promptNum", "promptNext", "promptOutput", "reddit", "twitter", "promptPlaque", "apiLink", "dictionaryName", "dictionaryForm"]);
   placeDefaultWordTypes();
   els["promptNext"].addEventListener("click", createPrompt);
   v.ajax("GET", "./" + dictionary + ".json", function(response){
@@ -15,6 +15,7 @@ window.onload = function(){
     }else{
       if(dictionary !== "default"){
         els["dictionaryName"].value = dictionary;
+        els["jsonLink"].href = "/" + dictionary + ".json";
       }
       placeWordColumns(response);
       createPrompt();

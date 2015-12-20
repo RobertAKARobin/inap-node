@@ -138,57 +138,75 @@ input:checked+label:hover{
 
 nav{
   background-color:#ddd;
-  color:#333;
+  color:#444;
   text-align:center;
 }
 #innerNavBox{
   box-sizing:border-box;
-  padding:5px 15px;
+  padding-left:15px;
+  padding-right:15px;
 }
 nav ul{
   list-style:none;
 }
-nav label{
-  border:none;
+nav h3{
+  line-height:36px;
 }
+nav label,
 nav input,
 nav textarea{
   display:block;
   border-radius:5px;
   width:100%;
   overflow:hidden;
-  margin-bottom:10px;
-  background-color:#fff;
   box-sizing:border-box;
+  background-color:#eee;
+  color:#aaa;
+  transition:color 0.2s, height 0.2s;
+  -webkit-transition:color 0.2s, height 0.2s;
+}
+nav label:hover,
+nav input:hover,
+nav textarea:hover{
+  background-color:#eee;
+}
+nav label{
+  border-bottom-left-radius:0;
+  border-bottom-right-radius:0;
+  cursor:text;
+  border:none;
+  margin:0;
+  padding:0;
+  line-height:20px;
 }
 nav textarea{
+  border-top-left-radius:0;
+  border-top-right-radius:0;
+  padding-top:0;
   resize:none;
-  height:1px;
-  /* Webkit won't allow focus on element with 0px height? */
-  opacity:0;
-  padding:0 5px;
-  transition:height 0.2s;
-  -webkit-transition:height 0.2s;
+  height:22px;
+}
+nav input,
+nav textarea{
+  margin-bottom:10px;
+  padding:5px;
+}
+nav input:focus,
+nav textarea:focus{
+  color:#000;
 }
 nav textarea:focus{
-  opacity:1;
-  padding:2px 5px;
   overflow-y:scroll;
   height:100px;
   resize:vertical;
 }
-nav input{
-  padding:5px;
-}
 nav input[type=submit]{
-  transition:background-color 0.2s;
-  -webkit-transition:background-color 0.2s;
-}
-nav input[type=submit]:hover{
-  background-color:rgba(0,0,0,0.1);
+  color:#444;
 }
 nav .links a{
   border:0;
+  padding:0 5px;
+  line-height:20px;
 }
 
 
@@ -199,14 +217,13 @@ nav .links a{
   align-self:center;
   cursor:pointer;
   margin:10px 0;
-  background-color:#f00;
-  color:#600;
   line-height:24px;
   padding-left:20px;
   padding-right:20px;
   padding-top:12px;
   height:48px;
   box-shadow:0px -2px 3px 2px #b00 inset;
+  background-color:#f00;
   color:#fdd;
   text-shadow:0px -1px 0 #baa;
   transition:box-shadow 0.1s, padding-top 0.1s;
@@ -245,7 +262,7 @@ nav .links a{
 
 @media (max-width: 640px){
   #mainBox{
-    border-right:0px;
+    border-right-width:20px;
   }
   #promptOutput{
     font-size:32px;
