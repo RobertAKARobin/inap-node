@@ -104,6 +104,9 @@ app.post("/dictionary", function(req, res){
     });
   });
 });
+app.get("/count", function(req, res){
+  res.json({success: true, count: Prompt.getCount()});
+});
 app.post("/count", function(req, res){
   res.json({success: true, count: Prompt.count()});
 });

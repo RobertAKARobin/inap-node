@@ -38,6 +38,9 @@ module.exports = (function(){
   p.count = function(){
     return counter.count++;
   }
+  p.getCount = function(){
+    return counter.count;
+  }
   p.new = function(dictionary, q){
     var choices = p.typeChoices();
     var query = q || p.checkedTypes(choices);
