@@ -24,6 +24,8 @@ function showError(req, res, message){
 
 app.use(function(req, res, next){
   req.prompt = {}
+  res.locals.title = req.query["prompt"] || "I Need A Prompt";
+  res.locals.description = req.query["prompt"] || "I Need A Prompt: Generate a random sentence using a dictionary you create!"
   next();
 });
 app.use(function(req, res, next){
@@ -53,7 +55,7 @@ app.use("/dictionary/:name/:action?", function(req, res, next){
 app.get("/", function(req, res){
   Dictionary.find("default", function(err, path){
     Dictionary.read(path, function(err, contents){
-      res.locals = Prompt.new(contents);
+      h.extend(res.locals, Prompt.new(contents));
       res.render("index");
     });
   });
@@ -62,7 +64,7 @@ app.get("/dictionary", function(req, res){
   res.redirect("/dictionary/default");
 });
 app.get("/dictionary/:name", function(req, res){
-  res.locals = Prompt.new(req.prompt.dictionary);
+  h.extend(res.locals, Prompt.new(req.prompt.dictionary));
   res.render("index");
 });
 app.get("/dictionary/:name/json", function(req, res){

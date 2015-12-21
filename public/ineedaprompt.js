@@ -46,6 +46,13 @@ ineedaprompt.helpers = (function(){
     })
     return comparators[indexOfMatch];
   }
+  h.extend = function(obj1, obj2){
+    var attr;
+    for(attr in obj2){
+      obj1[attr] = obj2[attr];
+    }
+    return obj1;
+  }
   h.hasSubstr = function(out, inn){
     return(out.toLowerCase().substring(0, inn.length) === inn.toLowerCase());
   }
