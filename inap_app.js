@@ -60,6 +60,14 @@ app.get("/", function(req, res){
     });
   });
 });
+app.get("/api", function(req, res){
+  Dictionary.find("default", function(err, path){
+    Dictionary.read(path, function(err, contents){
+      var prompt = Prompt.new(contents);
+      res.json({success: true, message: prompt.prompt, count: prompt.count});
+    });
+  });
+});
 app.get("/dictionary", function(req, res){
   res.redirect("/dictionary/default");
 });
