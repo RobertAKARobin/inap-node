@@ -39,6 +39,7 @@ app.use("/dictionary/:name?", function(req, res, next){
   var dictionary = req.params["name"] || "default";
   Dictionary.find(dictionary, function(err, path){
     if(err) return showError(req, res, err.message);
+    res.locals.name = dictionary;
     req.prompt.name = dictionary;
     req.prompt.path = path;
     next();
