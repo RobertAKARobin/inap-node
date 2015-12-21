@@ -45,7 +45,7 @@ module.exports = (function(){
       choices: choices,
       lists: p.wordLists(dictionary),
       prompt: new INAP(query, dictionary).english(),
-      count: p.count()
+      count: h.commaNum(p.count())
     }
   }
   return p;
