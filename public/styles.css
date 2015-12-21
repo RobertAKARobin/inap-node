@@ -210,7 +210,7 @@ nav .links a{
 }
 
 
-#promptNext{
+h1{
   display:inline-block;
   position:relative;
   width:auto;
@@ -228,7 +228,11 @@ nav .links a{
   text-shadow:0px -1px 0 #baa;
   transition:box-shadow 0.1s, padding-top 0.1s;
 }
-#promptNext:after{
+h1 a{
+  position:relative;
+  z-index:2;
+}
+h1:after{
   display:block;
   position:absolute;
   top:0;
@@ -239,22 +243,22 @@ nav .links a{
   box-shadow:0px 1px 3px 0px #333;
   transition:box-shadow 0.1s;
 }
-#promptNext,
-#promptNext:after{
+h1,
+h1:after{
   border-radius:24px;
   box-sizing:border-box;
 }
-#promptNext:hover{
+h1:hover{
   padding-top:13px;
   box-shadow:0px -1px 3px 2px #b00 inset;
 }
-#promptNext:hover:after{
+h1:hover:after{
 }
-#promptNext:active{
+h1:active{
   box-shadow:0px 5px 3px 2px #b00 inset;
   padding-top:16px;
 }
-#promptNext:active:after{
+h1:active:after{
   box-shadow:0px 0px 1px 0px #333;
 }
 

@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/styles.css" />
     <base target="_blank" />
+    <script>var dictionaryName = "{{name}}";</script>
     <script src="/ineedaprompt.js"></script>
     <script src="/script.js"></script>
-    <meta property="og:url" content="http://www.ineedaprompt.com" />
+    <meta property="og:url" content="http://{{url}}" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="{{title}}" />
     <meta property="og:description" content="{{description}}" />
@@ -17,8 +18,11 @@
     <input id="navToggler" type="checkbox" />
     <label id="navTrigger" for="navToggler"></label>
     <div id="mainBox">
-        <h1 id="promptNext">I Need A Prompt{{#if count}} &num;<span id="promptNum">{{count}}</span>{{/if}}
-        </h1>
+      {{#if count}}
+      <h1 id="promptNext">I Need A Prompt &num;<span id="promptNum">{{count}}</span></h1>
+      {{else}}
+      <h1><a href="/" target="_top">I Need A Prompt</a></h1>
+      {{/if}}
       <main>
         <div id="promptPlaque">
           <blockquote id="promptOutput">{{prompt}}</blockquote>

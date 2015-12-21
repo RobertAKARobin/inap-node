@@ -24,8 +24,9 @@ function showError(req, res, message){
 
 app.use(function(req, res, next){
   req.prompt = {}
-  res.locals.title = req.query["prompt"] || "I Need A Prompt";
-  res.locals.description = req.query["prompt"] || "I Need A Prompt: Generate a random sentence using a dictionary you create!"
+  res.locals.url = req.headers.host + req.url;
+  res.locals.title = "I Need A Prompt";
+  res.locals.description = "I Need A Prompt: Generate a random sentence using a dictionary you create!"
   next();
 });
 app.use(function(req, res, next){
@@ -57,6 +58,7 @@ app.get("/", function(req, res){
   Dictionary.find("default", function(err, path){
     Dictionary.read(path, function(err, contents){
       h.extend(res.locals, Prompt.new(contents));
+      res.locals.name = "default";
       res.render("index");
     });
   });
@@ -83,6 +85,12 @@ app.get("/dictionary/:name/prompt", function(req, res){
   try{ var prompt = Prompt.new(req.prompt.dictionary, req.prompt.query);
   }catch(e){ showError(req, res, e.message) }
   res.json({success: true, message: prompt.prompt, count: prompt.count});
+});
+app.get("/dictionary/:name/:prompt", function(req, res){
+  res.locals.title = req.params["prompt"];
+  res.locals.prompt = req.params["prompt"];
+  res.locals.lists = Prompt.wordLists(req.prompt.dictionary);
+  res.render("index");
 });
 
 app.post("/dictionary", function(req, res){
