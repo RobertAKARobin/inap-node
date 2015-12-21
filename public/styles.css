@@ -170,6 +170,11 @@ nav input:hover,
 nav textarea:hover{
   background-color:#eee;
 }
+nav input,
+nav textarea{
+  margin-bottom:10px;
+  padding:5px;
+}
 nav label{
   border-bottom-left-radius:0;
   border-bottom-right-radius:0;
@@ -185,11 +190,6 @@ nav textarea{
   padding-top:0;
   resize:none;
   height:22px;
-}
-nav input,
-nav textarea{
-  margin-bottom:10px;
-  padding:5px;
 }
 nav input:focus,
 nav textarea:focus{

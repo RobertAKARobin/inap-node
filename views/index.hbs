@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>INeedAPrompt</title>
+    <title>I Need A Prompt</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="/styles.css" />
     <base target="_blank" />
-    <script src="ineedaprompt.js"></script>
-    <script src="script.js"></script>
+    <script src="/ineedaprompt.js"></script>
+    <script src="/script.js"></script>
   </head>
   <body>
     <input id="navToggler" type="checkbox" />
     <label id="navTrigger" for="navToggler"></label>
     <div id="mainBox">
-      <h1 id="promptNext"><span id="promptNum">I Need A Prompt</span></h1>
+        <h1 id="promptNext">I Need A Prompt{{#if count}} &num;<span id="promptNum">{{count}}</span>{{/if}}
+        </h1>
       <main>
         <div id="promptPlaque">
-          <blockquote id="promptOutput">I Need A Prompt</blockquote>
+          <blockquote id="promptOutput">{{prompt}}</blockquote>
           <aside>
             <ul class="links">
               <li><a id="twitter">&num;ineedaprompt</a></li>
@@ -26,10 +27,12 @@
       </main>
       <footer>
         <ul id="wordTypes">
+          {{#each choices}}
           <li>
-            <input type="checkbox" value="{{type}}" id="choice_{{index}}" />
-            <label for="choice_{{index}}">{{type}}</label>
+            <input type="checkbox" {{this.checked}} value="{{this.type}}" id="choice_{{@index}}" />
+            <label for="choice_{{@index}}">{{this.type}}</label>
           </li>
+          {{/each}}
         </ul>
       </footer>
     </div>
@@ -38,10 +41,12 @@
         <h3>Generated from this dictionary:</h3>
         <form id="dictionaryForm" target="_top" method="post" action="/dictionary">
           <ul id="wordColumns">
+            {{#each lists}}
             <li class="list">
-              <label for="{{type}}">{{type}}s</label>
-              <textarea id="{{type}}" name="{{type}}" data-word-type="{{type}}">{{words}}</textarea>
+              <label for="{{@key}}">{{@key}}s</label>
+              <textarea id="{{@key}}" name="{{@key}}">{{this}}</textarea>
             </li>
+            {{/each}}
           </ul>
           <div id="dictionaryInfo">
             <input type="text" id="dictionaryName" name="dictionary" placeholder="Dictionary name" />

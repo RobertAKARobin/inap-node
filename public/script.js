@@ -7,20 +7,7 @@ window.onload = function(){
   var dictionary = location.pathname.substring(1) || "default";
   var columns = {};
   var els = getEls(["wordTypes", "jsonLink", "wordColumns", "newPrompt", "promptNum", "promptNext", "promptOutput", "reddit", "twitter", "promptPlaque", "apiLink", "dictionaryName", "dictionaryForm"]);
-  placeDefaultWordTypes();
   els["promptNext"].addEventListener("click", createPrompt);
-  v.ajax("GET", "./" + dictionary + ".json", function(response){
-    if(response.error){
-      updatePlaque("Dictionary not found.");
-    }else{
-      if(dictionary !== "default"){
-        els["dictionaryName"].value = dictionary;
-        els["jsonLink"].href = "/" + dictionary + ".json";
-      }
-      placeWordColumns(response);
-      createPrompt();
-    }
-  });
 
   function getEls(elIds){
     var els = {};
@@ -30,29 +17,11 @@ window.onload = function(){
     return els;
   }
 
-  function placeDefaultWordTypes(){
-    var template = els["wordTypes"].querySelector("li");
-    var types = ineedaprompt.default;
-    var out = v.templatify(template, types, function(index, type, el){
-      return { type: type, index: index }
-    });
-    out.forEach(function(el){
-      if(Math.random() > 0.5) el.querySelector("input").checked = true;
-    });
-  }
-
-  function placeWordColumns(dictionary){
-    var template = els["wordColumns"].querySelector(".list");
-    columns = v.templatify(template, dictionary, function(type, list, el){
-      return {type: type, words: "- " + list.join("\n- ")}
-    });
-  }
-
   function getDictionary(){
     var dictionary = {}
     var texts = document.querySelector("#wordColumns").querySelectorAll("textarea");
     h.eachIn(texts, function(textarea){
-      var type = textarea.getAttribute("data-word-type");
+      var type = textarea.name;
       dictionary[type] = h.splitList(textarea.value);
     });
     return dictionary;
@@ -62,7 +31,7 @@ window.onload = function(){
     var dictionary = getDictionary();
     var wordOrder = v.getChecks("#wordTypes input");
     var prompt = new ineedaprompt(wordOrder, dictionary).english();
-    v.ajax("POST", "/", function(response){
+    v.ajax("POST", "/count", function(response){
       updatePlaque(prompt, response.count);
     });
   }
@@ -72,7 +41,7 @@ window.onload = function(){
     els["promptOutput"].textContent = prompt;
     els["reddit"].href = reddit(queryParam);
     els["twitter"].href = twitter(queryParam);
-    els["promptNum"].textContent = "Prompt #" + h.commaNum(count);
+    els["promptNum"].textContent = h.commaNum(count);
   }
 
   function reddit(string){
@@ -108,24 +77,6 @@ window.onload = function(){
       return h.collect(inputs, function(input){
         if(input.checked) return input.value;
       });
-    }
-    v.templatify = function(template, collection, formatted){
-      var container = template.parentElement;
-      var output = [], key;
-      for(key in collection){
-        var el = template.cloneNode(true);
-        var input = formatted(key, collection[key], el);
-        var elHtml = el.innerHTML;
-        Object.keys(input).forEach(function(key){
-          var rx = new RegExp("{{"+ key + "}}", "g");
-          elHtml = elHtml.replace(rx, input[key] || "");
-        });
-        el.innerHTML = elHtml;
-        output.push(el);
-        container.appendChild(el);
-      }
-      container.removeChild(template);
-      return output;
     }
     return v;
   }

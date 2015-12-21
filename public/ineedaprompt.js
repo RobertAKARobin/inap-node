@@ -1,6 +1,10 @@
 "use strict";
 
-if(typeof module !== 'undefined') module.exports = ineedaprompt;
+var isFrontEnd = true;
+if(typeof module !== 'undefined'){
+  module.exports = ineedaprompt;
+  isFrontEnd = false;
+}
 
 function ineedaprompt(wordOrder, dictionary){
   var instance = this;
@@ -22,7 +26,7 @@ ineedaprompt.helpers = (function(){
     if(collection instanceof Number){
       l = collection.length;
     }else{
-      if((collection instanceof Array) || (collection instanceof NodeList)){
+      if((collection instanceof Array) || (isFrontEnd && collection instanceof NodeList)){
         keys = collection;
       }else{
         keys = Object.keys(collection);
@@ -30,7 +34,7 @@ ineedaprompt.helpers = (function(){
       l = keys.length;
     }
     for(i = 0; i < l; i++){
-      key = (collection instanceof Object) ? i : keys[i];
+      key = (collection.constructor.name == "Object") ? keys[i] : i;
       value = (collection instanceof Number) ? key : collection[key];
       if(callback(value, key, collection) === "break") return key;
     }
