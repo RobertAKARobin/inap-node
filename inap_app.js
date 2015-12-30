@@ -67,7 +67,7 @@ app.get("/api", function(req, res){
   Dictionary.find("default", function(err, path){
     Dictionary.read(path, function(err, contents){
       var prompt = Prompt.new(contents);
-      res.json({success: true, message: prompt.prompt, count: prompt.count});
+      res.json({success: true, prompt: prompt.prompt, count: prompt.count});
     });
   });
 });
@@ -84,7 +84,7 @@ app.get("/dictionary/:name/json", function(req, res){
 app.get("/dictionary/:name/prompt", function(req, res){
   try{ var prompt = Prompt.new(req.prompt.dictionary, req.prompt.query);
   }catch(e){ showError(req, res, e.message) }
-  res.json({success: true, message: prompt.prompt, count: prompt.count});
+  res.json({success: true, prompt: prompt.prompt, count: prompt.count});
 });
 app.get("/dictionary/:name/:prompt", function(req, res){
   res.locals.title = req.params["prompt"];
