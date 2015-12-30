@@ -6,6 +6,7 @@ window.onload = function(){
   var h = ineedaprompt.helpers;
   var columns = {};
   var els = getEls(["wordTypes", "jsonLink", "wordColumns", "newPrompt", "promptNum", "promptNext", "promptOutput", "reddit", "twitter", "facebook", "promptPlaque", "apiLink", "dictionaryName", "dictionaryForm"]);
+  var dictionaryName = els["dictionaryName"].value;
   if(els["promptNext"]) els["promptNext"].addEventListener("click", createPrompt);
   updatePlaque(els["promptOutput"].textContent);
 

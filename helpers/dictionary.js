@@ -50,12 +50,5 @@ module.exports = (function(){
     return name + "-" + password + ".json";
   }
 
-  d.isMatch = function(newPath, oldPath){
-    if(!oldPath || !newPath) return false;
-    if(oldPath === "default") return false;
-    if(newPath && newPath !== oldPath) return false;
-    return true;
-  }
-
   return d;
 }());

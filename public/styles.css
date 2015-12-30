@@ -18,42 +18,12 @@ a, label, button, input[type=submit]{
 html{
   font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
   font-size:14px;
-  background-color:#eee;
+  background-color:#fff;
   color:#999;
 }
 body{
   text-align:center;
-}
-
-#mainBox{
-  border-style:solid;
-  border-color:transparent;
-  border-right-width:300px;
-  min-width:320px;
-}
-nav{
-  min-height:100vh;
-  width:300px;
-  position:fixed;
-  top:0px;
-  right:0px;
-  z-index:1000;
-}
-#navTrigger{
-  width:0px;
-  height:100%;
-  position:fixed;
-  top:0px;
-  left:0px;
-  border:0;
-  border-radius:0;
-  margin:0;
-  padding:0;
-  background-color:#000;
-  opacity:0;
-  z-index:500;
-  transition:opacity 0.2s;
-  -webkit-transition:opacity 0.2s;
+  overflow-x:hidden;
 }
 
 #mainBox{
@@ -65,16 +35,22 @@ nav{
   justify-content:space-between;
   box-sizing:border-box;
 }
-body{
-  text-align:center;
+header{
+  order:98;
+  flex-shrink:1;
+}
+main{
+  flex-grow:1;
 }
 footer{
-  padding:18px 0;
+  order:99;
+  flex-shrink:1;
 }
 
 #promptOutput{
   font-size:48px;
   line-height:58px;
+  padding-top:1em;
   margin:10px;
   color:#000;
   opacity:1;
@@ -99,6 +75,7 @@ footer{
 .links,
 #wordTypes{
   font-size:0;
+  margin:10px 0;
 }
 .links li,
 #wordTypes li{
@@ -128,7 +105,7 @@ label,
   -webkit-transition:background-color 0.2s;
 }
 .links a:hover,
-label:hover,
+input+label:hover,
 input:checked+label{
   background-color:rgba(0,0,0,0.07);
 }
@@ -137,14 +114,9 @@ input:checked+label:hover{
 }
 
 nav{
-  background-color:#ddd;
   color:#444;
+  background-color:#fff;
   text-align:center;
-}
-#innerNavBox{
-  box-sizing:border-box;
-  padding-left:15px;
-  padding-right:15px;
 }
 nav ul{
   list-style:none;
@@ -160,24 +132,20 @@ nav textarea{
   width:100%;
   overflow:hidden;
   box-sizing:border-box;
-  background-color:#eee;
   color:#aaa;
-  transition:color 0.2s, height 0.2s;
-  -webkit-transition:color 0.2s, height 0.2s;
-}
-nav label:hover,
-nav input:hover,
-nav textarea:hover{
-  background-color:#eee;
+  transition:color 0.2s, height 0.2s, background-color 0.2s;
+  -webkit-transition:color 0.2s, height 0.2s, background-color 0.2s;
 }
 nav input,
 nav textarea{
   margin-bottom:10px;
   padding:5px;
 }
+nav input,
+nav textarea:focus{
+  background-color:#eee;
+}
 nav label{
-  border-bottom-left-radius:0;
-  border-bottom-right-radius:0;
   cursor:text;
   border:none;
   margin:0;
@@ -185,13 +153,11 @@ nav label{
   line-height:20px;
 }
 nav textarea{
-  border-top-left-radius:0;
-  border-top-right-radius:0;
   padding-top:0;
   resize:none;
   height:22px;
 }
-nav input:focus,
+nav input,
 nav textarea:focus{
   color:#000;
 }
@@ -203,20 +169,17 @@ nav textarea:focus{
 nav input[type=submit]{
   color:#444;
 }
-nav .links a{
-  border:0;
-  padding:0 5px;
-  line-height:20px;
+nav input[type=submit]:hover{
+  background-color:#ddd;
 }
 
 
-h1{
+.button{
   display:inline-block;
   position:relative;
   width:auto;
   align-self:center;
   cursor:pointer;
-  margin:10px 0;
   line-height:24px;
   padding-left:20px;
   padding-right:20px;
@@ -227,12 +190,13 @@ h1{
   color:#fdd;
   text-shadow:0px -1px 0 #baa;
   transition:box-shadow 0.1s, padding-top 0.1s;
+  -webkit-transition:box-shadow 0.1s, padding-top 0.1s;
 }
-h1 a{
+.button a{
   position:relative;
   z-index:2;
 }
-h1:after{
+.button:after{
   display:block;
   position:absolute;
   top:0;
@@ -242,56 +206,132 @@ h1:after{
   height:100%;
   box-shadow:0px 1px 3px 0px #333;
   transition:box-shadow 0.1s;
+  -webkit-transition:box-shadow 0.1s;
 }
-h1,
-h1:after{
+.button,
+.button:after{
   border-radius:24px;
   box-sizing:border-box;
 }
-h1:hover{
+.button:hover{
   padding-top:13px;
   box-shadow:0px -1px 3px 2px #b00 inset;
 }
-h1:hover:after{
+.button:hover:after{
 }
-h1:active{
+.button:active{
   box-shadow:0px 5px 3px 2px #b00 inset;
   padding-top:16px;
 }
-h1:active:after{
+.button:active:after{
   box-shadow:0px 0px 1px 0px #333;
 }
 
+#navTrigger{
+  width:30px;
+  height:100%;
+  position:fixed;
+  top:0px;
+  right:0px;
+  border:0;
+  border-radius:0;
+  margin:0;
+  padding:0;
+  z-index:2000;
+  background-color:rgba(0,0,0,0.1);
+  transition:opacity 0.2s, background-color 0.2s;
+  -webkit-transition:opacity 0.2s, background-color 0.2s;
+}
+#navTrigger span{
+  display:block;
+  position:absolute;
+  top:-0.5em;
+  right:0.5em;
+  color:#000;
+  transform:rotateZ(-90deg);
+  transform-origin:100% 100%;
+  letter-spacing:2px;
+  font-weight:bold;
+}
+#navTrigger:hover{
+  background-color:rgba(0,0,0,0.2);
+}
 
+html,body{
+  position:relative;
+  height:auto;
+}
+#mainBox{
+  border-style:solid;
+  border-color:transparent;
+  border-right-width:20px;
+  min-width:320px;
+  transition:border-right-width 0.2s;
+  -webkit-transition:border-right-width 0.2s;
+}
+nav{
+  min-height:100%;
+  width:300px;
+  padding:10px;
+  padding-right:40px;
+  box-sizing:border-box;
+  position:absolute;
+  top:0px;
+  right:-300px;
+  z-index:1000;
+  box-sizing:border-box;
+  right:-300px;
+  transition:right 0.2s;
+  -webkit-transition:right 0.2s;
+}
+#navToggler:checked+#navTrigger+#mainBox{
+  border-right-width:300px;
+}
+#navToggler:checked+#navTrigger+#mainBox+nav{
+  right:0px;
+}
 
 @media (max-width: 640px){
-  #mainBox{
-    border-right-width:20px;
-  }
   #promptOutput{
+    padding-top:0;
     font-size:32px;
     line-height:42px;
   }
   nav{
-    right:-300px;
-    transition:right 0.2s;
-    -webkit-transition:right 0.2s;
+    padding:10px;
   }
   #navTrigger{
-    left:auto;
-    right:0px;
-    width:30px;
-    opacity:0.2;
-  }
-  #navTrigger:hover{
-    opacity:0.3;
+    z-index:500;
   }
   #navToggler:checked+#navTrigger{
     width:100%;
-    opacity:0.5;
+    background-color:rgba(0,0,0,0.5);
   }
-  #navToggler:checked+*+*+nav{
-    right:0px;
+  #navToggler:checked+#navTrigger+#mainBox{
+    border-right-width:20px;
+  }
+  #navToggler:checked+#navTrigger+#mainBox+nav{
     box-shadow:0px 0px 50px 1px #000;
   }
+}
+
+a.tiles{
+  padding:0;
+  font-size:0px;
+}
+.tiles>span{
+  color:#222;
+  background-color:#f3f3f3;
+  border:1px solid #ddd;
+  display:inline-block;
+  line-height:32px;
+  font-family: "Andale Mono", monospace;
+  font-size:14px;
+  padding:0 8px;
+}
+.tiles>span:not(:first-child){
+  border-left-color:#fff;
+}
+.tiles .t{
+  color:#808;
 }

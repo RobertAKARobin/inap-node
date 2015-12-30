@@ -19,6 +19,7 @@ var Password   = require("./helpers/password");
 
 function showError(req, res, message){
   res.locals.prompt = message;
+  res.locals.name = "";
   res.render("index");
 }
 
@@ -41,6 +42,7 @@ app.use("/dictionary/:name?", function(req, res, next){
   Dictionary.find(dictionary, function(err, path){
     if(err) return showError(req, res, err.message);
     res.locals.name = dictionary;
+    res.locals.displayName = dictionary;
     req.prompt.name = dictionary;
     req.prompt.path = path;
     next();
@@ -59,6 +61,7 @@ app.get("/", function(req, res){
     Dictionary.read(path, function(err, contents){
       h.extend(res.locals, Prompt.new(contents));
       res.locals.name = "default";
+      res.locals.displayName = "";
       res.render("index");
     });
   });
@@ -96,12 +99,12 @@ app.get("/dictionary/:name/:prompt", function(req, res){
 app.post("/dictionary", function(req, res){
   var name = req.body.dictionary;
   var newPath = Dictionary.makePath(name, req.body.password);
-  Dictionary.find(name, function(err, oldPath){
-    if(!Dictionary.isMatch(newPath, oldPath)){
-      showError(req, res, "Bad password");
-    }else Dictionary.write(newPath, Dictionary.fromReq(req), function(){
-      res.redirect("/dictionary/" + name);
-    });
+  Dictionary.find(name, function(err, existingPath){
+    if((newPath && !existingPath) || newPath === existingPath){
+      Dictionary.write(newPath, Dictionary.fromReq(req), function(){
+        res.redirect("/dictionary/" + name);
+      });
+    }else showError(req, res, "Bad password");
   });
 });
 app.get("/count", function(req, res){

@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/styles.css" />
     <base target="_blank" />
-    <script>var dictionaryName = "{{name}}";</script>
     <script src="/ineedaprompt.js"></script>
     <script src="/script.js"></script>
     <meta property="og:url" content="http://{{url}}" />
@@ -15,17 +14,22 @@
     <meta property="og:site_name" content="INeedAPrompt" />
   </head>
   <body>
-    <input id="navToggler" type="checkbox" />
-    <label id="navTrigger" for="navToggler"></label>
+    {{#if name}}
+      <input id="navToggler" type="checkbox" />
+      <label id="navTrigger" for="navToggler"><span>SETTINGS&vellip;</span></label>
+    {{/if}}
     <div id="mainBox">
-      {{#if count}}
-      <h1 id="promptNext">I Need A Prompt &num;<span id="promptNum">{{count}}</span></h1>
-      {{else}}
-      <h1><a href="/" target="_top">I Need A Prompt</a></h1>
-      {{/if}}
+      <header>
+        {{#if count}}
+        <h1 id="promptNext" class="button">I Need A Prompt &num;<span id="promptNum">{{count}}</span></h1>
+        {{else}}
+        <h1><a href="/" target="_top" class="button">I Need A Prompt</a></h1>
+        {{/if}}
+      </header>
       <main>
         <div id="promptPlaque">
           <blockquote id="promptOutput">{{prompt}}</blockquote>
+          {{#if name}}
           <aside>
             <ul class="links">
               <li><a id="twitter">&num;ineedaprompt</a></li>
@@ -33,6 +37,7 @@
               <li><a id="facebook">facebook</a></li>
             </ul>
           </aside>
+          {{/if}}
         </div>
       </main>
       <footer>
@@ -44,11 +49,21 @@
           </li>
           {{/each}}
         </ul>
+        <ul class="links">
+          <li><a href="http://robertakarobin.com">by RobertAKARobin</a></li>
+          <li><a id="apiLink" href="/api?q=adj+noun+adv+verb+noun+location">API</a></li>
+          <li><a class="tiles" href="http://amzn.to/1G66iB5">
+            <span class="t">&lt;h2&gt;</span>
+            <span>My</span><span>other</span><span>project</span>
+            <span class="t">&lt;/h2&gt;</span>
+          </a></li>
+        </ul>
       </footer>
     </div>
-    <nav>
-      <div id="innerNavBox">
-        <h3>Generated from this dictionary:</h3>
+    {{#if name}}
+      <nav>
+        <h3>Make your own prompt dictionary!</h3>
+        <input type="hidden" id="dictionaryName" value="{{name}}" />
         <form id="dictionaryForm" target="_top" method="post" action="/dictionary">
           <ul id="wordColumns">
             {{#each lists}}
@@ -59,20 +74,12 @@
             {{/each}}
           </ul>
           <div id="dictionaryInfo">
-            <input type="text" id="dictionaryName" name="dictionary" placeholder="Dictionary name" value="{{name}}" />
-            <input type="text" name="password" placeholder="Super-secure password" />
+            <input type="text" name="dictionary" placeholder="Give your dictionary a name" value="{{displayName}}" />
+            <input type="password" name="password" placeholder="Pick a password" />
             <input type="submit" value="Save your dictionary" />
           </div>
         </form>
-
-        <ul class="links">
-          <li><a id="jsonLink" href="/default.json">JSON</a></li>
-          <li><a id="apiLink" href="/api">API</a></li>
-          <li><a href="http://github.com/robertakarobin/inap-node">Github</a></li>
-          <li><a href="http://robertakarobin.com">RobertAKARobin</a></li>
-          <li><a href="/">INeedAPrompt</a></li>
-        </ul>
-      </div>
-    </nav>
+      </nav>
+    {{/if}}
   </body>
 </html>
