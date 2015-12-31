@@ -44,11 +44,29 @@ module.exports = (function(){
   p.new = function(dictionary, q){
     var choices = p.typeChoices();
     var query = q || p.checkedTypes(choices);
+    var prompt = new INAP(query, dictionary);
     return {
       choices: choices,
-      lists: p.wordLists(dictionary),
-      prompt: new INAP(query, dictionary).english(),
-      count: h.commaNum(p.count())
+      lists: p.wordLists(prompt.dictionary),
+      prompt: prompt.english(),
+      count: h.commaNum(p.count()),
+      obj: prompt
+    }
+  }
+  p.mid = {
+    parseQuery: function(req, res, next){
+      var query = req.query["q"];
+      if(query) query = query.split(" ");
+      if(!query || query.length < 1) query = p.default.slice();
+      req.prompt.query = query;
+      next();
+    },
+    setDefaults: function(req, res, next){
+      req.prompt = {}
+      res.locals.url = req.headers.host + req.url;
+      res.locals.title = "I Need A Prompt";
+      res.locals.description = "I Need A Prompt: Generate a random sentence using a dictionary you create!"
+      next();
     }
   }
   return p;

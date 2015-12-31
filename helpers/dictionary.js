@@ -50,5 +50,26 @@ module.exports = (function(){
     return name + "-" + password + ".json";
   }
 
+  d.mid = {
+    getPath: function(req, res, next){
+      var dictionary = req.params["name"] || "default";
+      d.find(dictionary, function(err, path){
+        if(err) return res.json({ success: false, message: err.message });
+        res.locals.name = dictionary;
+        res.locals.displayName = dictionary;
+        req.prompt.name = dictionary;
+        req.prompt.path = path;
+        next();
+      });
+    },
+    getContents: function(req, res, next){
+      var path = req.prompt.path;
+      d.read(path, function(err, contents){
+        req.prompt.dictionary = contents;
+        next();
+      });
+    }
+  }
+
   return d;
 }());

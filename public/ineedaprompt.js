@@ -135,7 +135,7 @@ ineedaprompt.prototype = (function(){
     var wordOrder = this.wordOrder, allowedWordTypes = ineedaprompt.wordTypes;
     h.eachIn(wordOrder, function(wordType, index){
       var match = h.findMatchInArray(wordType, allowedWordTypes);
-      if(!match) throw("Oops! '" + wordType + "' is not an allowed word.");
+      if(!match) throw("Oops! '" + wordType + "' is not an allowed word type.");
       else wordOrder[index] = match;
     });
   }

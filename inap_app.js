@@ -15,46 +15,37 @@ var Password   = require("./helpers/password");
   app.use(bodyParser.urlencoded({extended: false}));
   app.use(bodyParser.json());
   app.set("view engine", "hbs");
+  app.use(Prompt.mid.setDefaults);
+  app.use(Prompt.mid.parseQuery);
+  app.use("/api", Dictionary.mid.getPath);
+  app.use("/api", Dictionary.mid.getContents);
+  app.use("/dictionary/:name?", Dictionary.mid.getPath);
+  app.use("/dictionary/:name/:json?", Dictionary.mid.getContents);
 }());
 
-function showError(req, res, message){
+function showError(res, message){
   res.locals.prompt = message;
   res.locals.name = "";
   res.render("index");
 }
 
-app.use(function(req, res, next){
-  req.prompt = {}
-  res.locals.url = req.headers.host + req.url;
-  res.locals.title = "I Need A Prompt";
-  res.locals.description = "I Need A Prompt: Generate a random sentence using a dictionary you create!"
-  next();
-});
-app.use(function(req, res, next){
-  var query = req.query["q"];
-  if(query) query = query.split(" ");
-  if(!query || query.length < 1) query = Prompt.default.slice();
-  req.prompt.query = query;
-  next();
-});
-app.use("/dictionary/:name?", function(req, res, next){
-  var dictionary = req.params["name"] || "default";
-  Dictionary.find(dictionary, function(err, path){
-    if(err) return showError(req, res, err.message);
-    res.locals.name = dictionary;
-    res.locals.displayName = dictionary;
-    req.prompt.name = dictionary;
-    req.prompt.path = path;
-    next();
+function errorJSON(res, message){
+  res.json({
+    success: false,
+    message: message
+  })
+}
+
+function promptJSON(res, prompt){
+  res.json({
+    success: true,
+    dictionaryURL: "http://" + res.req.headers.host + "/dictionary/" + res.locals.name + "/json",
+    githubURL: "https://github.com/robertakarobin/inap-node",
+    prompt: prompt.prompt,
+    count: prompt.count,
+    components: prompt.obj.wordOrder
   });
-});
-app.use("/dictionary/:name/:action?", function(req, res, next){
-  var path = req.prompt.path;
-  Dictionary.read(path, function(err, contents){
-    req.prompt.dictionary = contents;
-    next();
-  });
-});
+}
 
 app.get("/", function(req, res){
   Dictionary.find("default", function(err, path){
@@ -67,12 +58,9 @@ app.get("/", function(req, res){
   });
 });
 app.get("/api", function(req, res){
-  Dictionary.find("default", function(err, path){
-    Dictionary.read(path, function(err, contents){
-      var prompt = Prompt.new(contents);
-      res.json({success: true, prompt: prompt.prompt, count: prompt.count});
-    });
-  });
+  try{ var prompt = Prompt.new(req.prompt.dictionary, req.prompt.query);
+  }catch(e){ return errorJSON(res, e); }
+  promptJSON(res, prompt);
 });
 app.get("/dictionary", function(req, res){
   res.redirect("/dictionary/default");
@@ -86,8 +74,8 @@ app.get("/dictionary/:name/json", function(req, res){
 });
 app.get("/dictionary/:name/prompt", function(req, res){
   try{ var prompt = Prompt.new(req.prompt.dictionary, req.prompt.query);
-  }catch(e){ showError(req, res, e.message) }
-  res.json({success: true, prompt: prompt.prompt, count: prompt.count});
+  }catch(e){ return errorJSON(res, e); }
+  promptJSON(res, prompt);
 });
 app.get("/dictionary/:name/:prompt", function(req, res){
   res.locals.title = req.params["prompt"];
@@ -104,7 +92,7 @@ app.post("/dictionary", function(req, res){
       Dictionary.write(newPath, Dictionary.fromReq(req), function(){
         res.redirect("/dictionary/" + name);
       });
-    }else showError(req, res, "Bad password");
+    }else showError(res, "Bad password");
   });
 });
 app.get("/count", function(req, res){
