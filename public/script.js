@@ -5,7 +5,7 @@ window.onload = function(){
   var v = viewHelpers();
   var h = ineedaprompt.helpers;
   var columns = {};
-  var els = getEls(["wordTypes", "jsonLink", "wordColumns", "newPrompt", "promptNum", "promptNext", "promptOutput", "reddit", "twitter", "facebook", "promptPlaque", "apiLink", "dictionaryName", "dictionaryForm"]);
+  var els = getEls(["wordTypes", "jsonLink", "wordColumns", "newPrompt", "promptNum", "promptNext", "promptOutput", "reddit", "twitter", "facebook", "permalink", "promptPlaque", "apiLink", "dictionaryName", "dictionaryForm"]);
   var dictionaryName = els["dictionaryName"].value;
   if(els["promptNext"]) els["promptNext"].addEventListener("click", createPrompt);
   updatePlaque(els["promptOutput"].textContent);
@@ -43,6 +43,7 @@ window.onload = function(){
     els["reddit"].href = reddit(queryParam);
     els["twitter"].href = twitter(queryParam);
     els["facebook"].href = facebook(prompt);
+    els["permalink"].href = permalink(prompt);
     if(count) els["promptNum"].textContent = h.commaNum(count);
   }
 
@@ -54,8 +55,12 @@ window.onload = function(){
     return "https://twitter.com/intent/tweet?text=%23ineedaprompt+" + string;
   }
 
+  function permalink(string){
+    return "http://ineedaprompt.com/dictionary/" + dictionaryName + "/" + encodeURI(string);
+  }
+
   function facebook(string){
-    return "https://www.facebook.com/sharer/sharer.php?u=http://ineedaprompt.com/dictionary/" + dictionaryName + "/" + encodeURI(string);
+    return "https://www.facebook.com/sharer/sharer.php?u=" + permalink(string);
   }
 
   function viewHelpers(){
