@@ -53,6 +53,7 @@ app.get("/", function(req, res){
       h.extend(res.locals, Prompt.new(contents));
       res.locals.name = "default";
       res.locals.displayName = "";
+      res.locals.isDefault = true;
       res.render("index");
     });
   });
