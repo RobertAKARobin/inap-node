@@ -15,92 +15,111 @@ var Password   = require("./helpers/password");
   app.use(bodyParser.urlencoded({extended: false}));
   app.use(bodyParser.json());
   app.set("view engine", "hbs");
-  app.use(Prompt.mid.setDefaults);
-  app.use(Prompt.mid.parseQuery);
-  app.use("/api", Dictionary.mid.getPath);
-  app.use("/api", Dictionary.mid.getContents);
-  app.use("/dictionary/:name?", Dictionary.mid.getPath);
-  app.use("/dictionary/:name/:json?", Dictionary.mid.getContents);
+  app.use("/count", function(req, res, next){
+    var count = (req.method == "POST" ? Prompt.count() : Prompt.getCount());
+    res.json({success: true, count: count});
+  });
+  app.use(function(req, res, next){
+    res.locals = {
+      url:        req.headers.host + req.url,
+      title:      "I Need A Prompt",
+      description:"I Need A Prompt: Generate a random sentence using a dictionary you create!"
+    }
+    next();
+  });
 }());
 
-function showError(res, message){
-  res.locals.prompt = message;
-  res.locals.name = "";
+function isHTML(req, res, next){ req.isHTML = true; next(); }
+function isJSON(req, res, next){ req.isJSON = true; next(); }
+function errify(res, message){
+  if(res.req.isHTML){
+    res.locals.prompt = message;
+    res.render("index");
+  }else{
+    res.json({success: false, message: message});
+  }
+}
+
+Prompt.load = function(req, res, next){
+  var query   = Prompt.parseQueryString(req.query["q"]);
+  var obj     = new INAP(query.slice(), req.dictionary.contents);
+  req.prompt  = {
+    query:      query,
+    english:    obj.english(),
+    components: obj.wordOrder,
+    count:      Prompt.count()
+  }
+  next();
+}
+Prompt.renderHTML = function(req, res, next){
+  var lists = []
+  res.locals.prompt = req.prompt.english,
+  res.locals.count  = h.commaNum(req.prompt.count),
+  res.locals.choices= Prompt.getWordChoices(req.prompt.query)
   res.render("index");
 }
-
-function errorJSON(res, message){
-  res.json({
-    success: false,
-    message: message
-  })
-}
-
-function promptJSON(res, prompt){
-  res.json({
-    success: true,
-    dictionaryURL: "http://" + res.req.headers.host + "/dictionary/" + res.locals.name + "/json",
-    githubURL: "https://github.com/robertakarobin/inap-node",
-    prompt: prompt.prompt,
-    count: prompt.count,
-    components: prompt.obj.wordOrder
-  });
-}
-
-app.get("/", function(req, res){
-  Dictionary.find("default", function(err, path){
+Dictionary.load = function(req, res, next){
+  var dictionary = {name: (req.params["name"] || "default")}
+  dictionary.isDefault = (dictionary.name === "default");
+  Dictionary.find(dictionary.name, function(err, path){
+    if(err) return errify(res, err.message);
+    dictionary.path = path;
+    dictionary.display = (dictionary.isDefault ? "" : dictionary.name);
     Dictionary.read(path, function(err, contents){
-      h.extend(res.locals, Prompt.new(contents));
-      res.locals.name = "default";
-      res.locals.displayName = "";
-      res.locals.isDefault = true;
-      res.render("index");
+      dictionary.contents   = contents;
+      req.dictionary        = dictionary;
+      res.locals.lists      = Dictionary.lists(req.dictionary.contents);
+      res.locals.name       = req.dictionary.name;
+      res.locals.displayName= req.dictionary.display;
+      res.locals.isDefault  = dictionary.isDefault;
+      next();
     });
   });
-});
-app.get("/api", function(req, res){
-  try{ var prompt = Prompt.new(req.prompt.dictionary, req.prompt.query);
-  }catch(e){ return errorJSON(res, e); }
-  promptJSON(res, prompt);
-});
-app.get("/dictionary", function(req, res){
-  res.redirect("/dictionary/default");
-});
-app.get("/dictionary/:name", function(req, res){
-  h.extend(res.locals, Prompt.new(req.prompt.dictionary));
-  res.render("index");
-});
-app.get("/dictionary/:name/json", function(req, res){
-  res.json(req.prompt.dictionary);
-});
-app.get("/dictionary/:name/prompt", function(req, res){
-  try{ var prompt = Prompt.new(req.prompt.dictionary, req.prompt.query);
-  }catch(e){ return errorJSON(res, e); }
-  promptJSON(res, prompt);
-});
-app.get("/dictionary/:name/:prompt", function(req, res){
-  res.locals.title = req.params["prompt"];
-  res.locals.prompt = req.params["prompt"];
-  res.locals.lists = Prompt.wordLists(req.prompt.dictionary);
-  res.render("index");
+}
+
+app.get("/",
+  isHTML, Dictionary.load, Prompt.load, Prompt.renderHTML);
+app.get("/dictionary/:name",
+  isHTML, Dictionary.load, Prompt.load, Prompt.renderHTML);
+app.get("/api",
+  isJSON, Dictionary.load, Prompt.load, function(req, res){
+    res.json(req.prompt);
+  });
+app.get("/dictionary/:name/prompt",
+  isJSON, Dictionary.load, Prompt.load, function(req, res){
+    req.prompt.dictionaryURL = "http://" + req.headers.host + "/dictionary/" + req.dictionary.name + "/json";
+    res.json(req.prompt);
+  });
+app.get("/dictionary/:name/json",
+  isJSON, Dictionary.load, function(req, res){
+    res.json(req.dictionary.contents);
+  });
+app.get("/dictionary/:name/:prompt",
+  isHTML, Dictionary.load, function(req, res){
+    res.locals.title  = req.params["prompt"];
+    res.locals.prompt = req.params["prompt"];
+    res.locals.count  = h.commaNum(Prompt.getCount() - 1);
+    res.locals.choices= Prompt.getWordChoices(Prompt.parseQueryString());
+    res.render("index");
+  });
+app.get("*", function(req, res){
+  res.redirect("/");
 });
 
-app.post("/dictionary", function(req, res){
+app.post("/dictionary", isHTML, function(req, res){
   var name = req.body.dictionary;
   var newPath = Dictionary.makePath(name, req.body.password);
   Dictionary.find(name, function(err, existingPath){
     if((newPath && !existingPath) || newPath === existingPath){
-      Dictionary.write(newPath, Dictionary.fromReq(req), function(){
+      var dictionary = {}
+      h.eachIn(INAP.wordTypes, function(type){
+        dictionary[type] = h.splitList(req.body[type]);
+      });
+      Dictionary.write(newPath, dictionary, function(){
         res.redirect("/dictionary/" + name);
       });
-    }else showError(res, "Bad password");
+    }else errify(res, "Bad password");
   });
-});
-app.get("/count", function(req, res){
-  res.json({success: true, count: Prompt.getCount()});
-});
-app.post("/count", function(req, res){
-  res.json({success: true, count: Prompt.count()});
 });
 
 app.listen(3001, function(){

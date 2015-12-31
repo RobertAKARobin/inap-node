@@ -15,59 +15,31 @@ module.exports = (function(){
 
   p.default = INAP.default;
 
-  p.typeChoices = function(){
-    var choices = [];
-    h.eachIn(p.default, function(type){
-      var isChecked = (Math.random() > 0.5) ? "checked" : null;
-      choices.push({ type: type, checked: isChecked });
-    });
-    return choices;
-  }
-  p.checkedTypes = function(choices){
-    return h.collect(choices, function(choice){
-      if(choice.checked) return choice.type;
-    });
-  }
-  p.wordLists = function(json){
-    var lists = {};
-    h.eachIn(json, function(list, type){
-      lists[type] = "- " + list.join("\n- ");
-    });
-    return lists;
-  }
+  p.choices = ["adjective", "adjective", "noun", "adverb", "verb", "adjective", "adjective", "noun", "location"];
+  
   p.count = function(){
     return counter.count++;
   }
   p.getCount = function(){
     return counter.count;
   }
-  p.new = function(dictionary, q){
-    var choices = p.typeChoices();
-    var query = q || p.checkedTypes(choices);
-    var prompt = new INAP(query, dictionary);
-    return {
-      choices: choices,
-      lists: p.wordLists(prompt.dictionary),
-      prompt: prompt.english(),
-      count: h.commaNum(p.count()),
-      obj: prompt
-    }
+  p.getWordChoices = function(query){
+    var choices = [];
+    var indexes = h.indexesOf(query, p.choices);
+    h.eachIn(p.choices, function(choice, i){
+      var checked = (indexes.indexOf(i) > -1) ? "checked" : "";
+      choices[i] = {type: choice, checked: checked}
+    });
+    return choices;
   }
-  p.mid = {
-    parseQuery: function(req, res, next){
-      var query = req.query["q"];
-      if(query) query = query.split(" ");
-      if(!query || query.length < 1) query = p.default.slice();
-      req.prompt.query = query;
-      next();
-    },
-    setDefaults: function(req, res, next){
-      req.prompt = {}
-      res.locals.url = req.headers.host + req.url;
-      res.locals.title = "I Need A Prompt";
-      res.locals.description = "I Need A Prompt: Generate a random sentence using a dictionary you create!"
-      next();
-    }
+  p.parseQueryString = function(string){
+    var query = (string ? string.split(" ") : []);
+    h.eachIn(query, function(item, i){
+      var match = h.findMatchInArray(item, INAP.wordTypes);
+      if(!match) query.splice(i, 1);
+      else query[i] = match;
+    });
+    return (query.length < 1) ? h.sample(p.choices) : query;
   }
   return p;
 }());

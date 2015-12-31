@@ -34,14 +34,6 @@ module.exports = (function(){
     });
   }
 
-  d.fromReq = function(req){
-    var dictionary = {}
-    h.eachIn(INAP.wordTypes, function(type){
-      dictionary[type] = h.splitList(req.body[type]);
-    });
-    return dictionary;
-  }
-
   d.makePath = function(name, password){
     if(!name || !password) return false;
     name = name.replace(/[^a-zA-Z0-9]+/g, "").toLowerCase().trim();
@@ -50,25 +42,12 @@ module.exports = (function(){
     return name + "-" + password + ".json";
   }
 
-  d.mid = {
-    getPath: function(req, res, next){
-      var dictionary = req.params["name"] || "default";
-      d.find(dictionary, function(err, path){
-        if(err) return res.json({ success: false, message: err.message });
-        res.locals.name = dictionary;
-        res.locals.displayName = dictionary;
-        req.prompt.name = dictionary;
-        req.prompt.path = path;
-        next();
-      });
-    },
-    getContents: function(req, res, next){
-      var path = req.prompt.path;
-      d.read(path, function(err, contents){
-        req.prompt.dictionary = contents;
-        next();
-      });
-    }
+  d.lists = function(json){
+    var lists = {};
+    h.eachIn(json, function(list, type){
+      lists[type] = "- " + list.join("\n- ");
+    });
+    return lists;
   }
 
   return d;

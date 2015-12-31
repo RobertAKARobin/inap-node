@@ -15,7 +15,7 @@ ineedaprompt.wordTypes = [
   "noun", "adjective", "adverb", "verb", "location"
 ]
 ineedaprompt.default = [
-  "adjective", "adjective", "noun", "adverb", "verb", "adjective", "adjective", "noun", "location"
+  "adjective", "noun", "verb", "noun", "location"
 ];
 ineedaprompt.prepositions = ["aboard", "about", "above", "across", "after", "against", "along", "alongside", "amid", "among", "anti", "around", "as", "at", "before", "behind", "below", "beneath", "beside", "besides", "between", "beyond", "but", "by", "concerning", "considering", "despite", "down", "during", "except", "excepting", "excluding", "following", "for", "from", "in", "inside", "into", "like", "minus", "near", "of", "off", "on", "onto", "opposite", "outside", "over", "past", "per", "plus", "regarding", "round", "save", "since", "than", "through", "to", "toward", "towards", "under", "underneath", "unlike", "until", "up", "upon", "versus", "via", "with", "within", "without"];
 
@@ -85,6 +85,24 @@ ineedaprompt.helpers = (function(){
       list[i] = word.replace(/^[-\s]*/, "").trim();
     });
     return list;
+  }
+  h.indexesOf = function(input, comparator){
+    var indexes = [];
+    comparator = comparator.slice();
+    h.eachIn(input, function(item){
+      var index = comparator.indexOf(item);
+      indexes.push(index);
+      delete comparator[index];
+    });
+    return indexes;
+  }
+  h.sample = function(input){
+    var output = [];
+    input = input.slice();
+    h.eachIn(input, function(item){
+      if(Math.random() > 0.5) output.push(item);
+    })
+    return output;
   }
   return h;
 }());
