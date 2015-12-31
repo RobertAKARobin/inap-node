@@ -35,7 +35,7 @@ body{
   justify-content:space-between;
   box-sizing:border-box;
 }
-header{
+h1{
   order:98;
   flex-shrink:1;
 }

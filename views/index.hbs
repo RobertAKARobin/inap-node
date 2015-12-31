@@ -19,13 +19,11 @@
       <label id="navTrigger" for="navToggler"><span>SETTINGS&vellip;</span></label>
     {{/if}}
     <div id="mainBox">
-      <header>
-        {{#if count}}
-        <h1 id="promptNext" class="button">I Need A Prompt &num;<span id="promptNum">{{count}}</span></h1>
-        {{else}}
-        <h1><a href="/" target="_top" class="button">I Need A Prompt</a></h1>
-        {{/if}}
-      </header>
+      {{#if count}}
+      <h1 id="promptNext" class="button">I Need A Prompt &num;<span id="promptNum">{{count}}</span></h1>
+      {{else}}
+      <h1><a href="/" target="_top" class="button">I Need A Prompt</a></h1>
+      {{/if}}
       <main>
         <div id="promptPlaque">
           <blockquote id="promptOutput">{{prompt}}</blockquote>
