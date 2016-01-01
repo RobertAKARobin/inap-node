@@ -4,28 +4,43 @@ window.onload = function(){
 
   var v = viewHelpers();
   var h = ineedaprompt.helpers;
-  var columns = {};
   var els = getEls(["wordTypes", "jsonLink", "wordColumns", "newPrompt", "promptNum", "promptNext", "promptOutput", "reddit", "twitter", "facebook", "permalink", "promptPlaque", "apiLink", "dictionaryName", "dictionaryForm"]);
   var dictionaryName = els["dictionaryName"].value;
-  if(els["promptNext"]) els["promptNext"].addEventListener("click", createPrompt);
+  var columns = getColumns();
+  var dictionary = getDictionary();
+
   updatePlaque(els["promptOutput"].textContent);
+  if(els["promptNext"]) els["promptNext"].addEventListener("click", createPrompt);
 
   function getEls(elIds){
     var els = {};
-    elIds.forEach(function(id){
+    h.eachIn(elIds, function(id){
       els[id] = document.getElementById(id);
     });
     return els;
   }
 
-  function getDictionary(){
-    var dictionary = {}
-    var texts = document.querySelector("#wordColumns").querySelectorAll("textarea");
-    h.eachIn(texts, function(textarea){
-      var type = textarea.name;
-      dictionary[type] = h.splitList(textarea.value);
+  function getColumns(){
+    var columns = (columns || []);
+    h.eachIn(document.querySelectorAll("#wordColumns textarea"), function(el){
+      columns.push(el);
+      el.addEventListener("input", function(){
+        this.setAttribute("data-tainted", "true");
+      });
     });
-    return dictionary;
+    return columns;
+  }
+
+  function getDictionary(){
+    var d = (dictionary || {});
+    h.eachIn(columns, function(textarea){
+      var type = textarea.name;
+      if(!d[type] || textarea.hasAttribute("data-tainted")){
+        d[type] = h.splitList(textarea.value);
+        textarea.removeAttribute("data-tainted");
+      }
+    });
+    return d;
   }
 
   function createPrompt(){
