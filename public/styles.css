@@ -75,6 +75,9 @@ footer{
   margin:2px;
   display:inline-block;
 }
+.links a{
+  text-decoration:underline;
+}
 #wordTypes input,
 #navToggler{
   display:block;
