@@ -4,7 +4,7 @@ window.onload = function(){
 
   var v = viewHelpers();
   var h = ineedaprompt.helpers;
-  var els = getEls(["wordTypes", "jsonLink", "wordColumns", "newPrompt", "promptNum", "promptNext", "promptOutput", "reddit", "twitter", "facebook", "permalink", "promptPlaque", "apiLink", "dictionaryName", "dictionaryForm"]);
+  var els = getEls(["wordTypes", "jsonLink", "wordColumns", "newPrompt", "promptNum", "promptNext", "promptOutput", "reddit", "twitter", "facebook", "permalink", "apiLink", "dictionaryName", "dictionaryForm"]);
   var dictionaryName = els["dictionaryName"].value;
   var columns = getColumns();
   var dictionary = getDictionary();

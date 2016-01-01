@@ -16,7 +16,7 @@
   <body>
     {{#if name}}
       <input id="navToggler" type="checkbox" />
-      <label id="navTrigger" for="navToggler"><span>SETTINGS&vellip;</span></label>
+      <label id="navTrigger" for="navToggler"><span>EDIT WORDS&vellip;</span></label>
     {{/if}}
     <div id="mainBox">
       {{#if count}}
@@ -24,45 +24,41 @@
       {{else}}
       <h1><a href="/" target="_top" class="button">I Need A Prompt</a></h1>
       {{/if}}
-      <main>
-        <div id="promptPlaque">
-          <blockquote id="promptOutput">{{prompt}}</blockquote>
-          {{#if name}}
-          <aside>
-            <ul class="links">
-              <li><a id="twitter">&num;ineedaprompt</a></li>
-              <li><a id="reddit">r/ineedaprompt</a></li>
-              <li><a id="facebook">facebook</a></li>
-              <li><a id="permalink">permalink</a></li>
-            </ul>
-          </aside>
-          {{/if}}
-        </div>
-      </main>
-      <footer>
-        <ul id="wordTypes">
-          {{#each choices}}
-          <li>
-            <input type="checkbox" {{this.checked}} value="{{this.type}}" id="choice_{{@index}}" />
-            <label for="choice_{{@index}}">{{this.type}}</label>
-          </li>
-          {{/each}}
-        </ul>
-        <ul class="links">
-          <li><a href="http://robertakarobin.com">by RobertAKARobin</a></li>
-          <li><a id="apiLink" href="/dictionary/{{name}}/prompt?q=adj+noun+adv+verb+noun+location">API</a></li>
-          <li><a class="tiles" href="http://magnetichtml.com">
-            <span class="t">&lt;h2&gt;</span>
-            <span>Try</span><span>my</span><span>other</span><span>project</span>
-            <span class="t">&lt;/h2&gt;</span>
-          </a></li>
-          <li><a class="tiles" href="http://amzn.to/1G66iB5">
-            <span class="t">&lt;em&gt;</span>
-            <span>Now</span><span>on</span><span>Amazon!</span>
-            <span class="t">&lt;/em&gt;</span>
-          </a></li>
-        </ul>
-      </footer>
+
+      <blockquote id="promptOutput">{{prompt}}</blockquote>
+
+      {{#if name}}
+      <ul id="shareLinks" class="links">
+        <li><a id="twitter">&num;ineedaprompt</a></li>
+        <li><a id="reddit">r/ineedaprompt</a></li>
+        <li><a id="facebook">facebook</a></li>
+        <li><a id="permalink">permalink</a></li>
+      </ul>
+      {{/if}}
+
+      <ul id="wordTypes">
+        {{#each choices}}
+        <li>
+          <input type="checkbox" {{this.checked}} value="{{this.type}}" id="choice_{{@index}}" />
+          <label for="choice_{{@index}}">{{this.type}}</label>
+        </li>
+        {{/each}}
+      </ul>
+
+      <ul id="links" class="links">
+        <li><a href="http://robertakarobin.com">by RobertAKARobin</a></li>
+        <li><a id="apiLink" href="/dictionary/{{name}}/prompt?q=adj+noun+adv+verb+noun+location">API</a></li>
+        <li><a class="tiles" href="http://magnetichtml.com">
+          <span class="t">&lt;h2&gt;</span>
+          <span>Try</span><span>my</span><span>other</span><span>project</span>
+          <span class="t">&lt;/h2&gt;</span>
+        </a></li>
+        <li><a class="tiles" href="http://amzn.to/1G66iB5">
+          <span class="t">&lt;em&gt;</span>
+          <span>Now</span><span>on</span><span>Amazon!</span>
+          <span class="t">&lt;/em&gt;</span>
+        </a></li>
+      </ul>
     </div>
     {{#if name}}
       <nav>
