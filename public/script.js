@@ -44,11 +44,15 @@ window.onload = function(){
   }
 
   function createPrompt(){
-    var dictionary = getDictionary();
-    var wordOrder = v.getChecks("#wordTypes input");
-    var prompt = new ineedaprompt(wordOrder, dictionary).english();
-    v.ajax("POST", "/count", function(response){
-      updatePlaque(prompt, response.count);
+    var dictionary, wordOrder, prompt;
+    dictionary = getDictionary();
+    wordOrder = v.getChecks("#wordTypes input");
+    prompt = new ineedaprompt(wordOrder, dictionary).english();
+    v.fade(els["promptOutput"], 0, function(){
+      v.ajax("POST", "/count", function(response){
+        updatePlaque(prompt, response.count);
+        v.fade(els["promptOutput"], 1);
+      });
     });
   }
 
@@ -103,6 +107,26 @@ window.onload = function(){
       return h.collect(inputs, function(input){
         if(input.checked) return input.value;
       });
+    }
+    v.fade = function(el, to, callback){
+      var opacity = parseInt(window.getComputedStyle(el)["opacity"]);
+      var fader, isDone, change;
+      if(opacity > to){
+        isDone = function(){ return (opacity <= to) }
+        change = function(){ return (opacity = opacity - 0.1) }
+      }else{
+        isDone = function(){ return (opacity >= to) }
+        change = function(){ return (opacity = opacity + 0.1) }
+      }
+      fader = setInterval(fade, 20);
+      function fade(){
+        change();
+        if(isDone()){
+          clearInterval(fader);
+          el.style.opacity = to;
+          if(callback) setTimeout(callback, 200);
+        }else el.style.opacity = opacity;
+      }
     }
     return v;
   }

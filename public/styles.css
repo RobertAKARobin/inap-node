@@ -55,17 +55,12 @@ footer{
   color:#000;
   opacity:1;
   text-shadow:0px 3px 10px #ccc;
-  transition:opacity 0.2s;
-  -webkit-transition:opacity 0.2s;
 }
 #promptOutput:before{
   content:"\201c";
 }
 #promptOutput:after{
   content:"\201d";
-}
-#promptNext:active+main #promptOutput{
-  opacity:0;
 }
 
 
