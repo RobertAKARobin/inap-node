@@ -170,55 +170,35 @@ nav input[type=submit]:hover{
 
 .button{
   display:inline-block;
-  position:relative;
   width:auto;
   align-self:center;
   cursor:pointer;
+  border-radius:24px;
   line-height:24px;
   padding-left:20px;
   padding-right:20px;
   padding-top:12px;
   height:48px;
-  box-shadow:0px -2px 3px 2px #b00 inset;
+  box-shadow:inset 0px -2px 3px 2px #b00, 0px 1px 3px 0px #333;
   background-color:#f00;
   color:#fdd;
   text-shadow:0px -1px 0 #baa;
-  transition:box-shadow 0.1s, padding-top 0.1s;
-  -webkit-transition:box-shadow 0.1s, padding-top 0.1s;
+  box-sizing:border-box;
+  transition:background-color 0.2s, box-shadow 0.1s, padding-top 0.1s;
+  -webkit-transition:background-color 0.2s, box-shadow 0.1s, padding-top 0.1s;
 }
 .button a{
   position:relative;
   z-index:2;
 }
-.button:after{
-  display:block;
-  position:absolute;
-  top:0;
-  left:0;
-  content:"";
-  width:100%;
-  height:100%;
-  box-shadow:0px 1px 3px 0px #333;
-  transition:box-shadow 0.1s;
-  -webkit-transition:box-shadow 0.1s;
-}
-.button,
-.button:after{
-  border-radius:24px;
-  box-sizing:border-box;
-}
 .button:hover{
-  padding-top:13px;
-  box-shadow:0px -1px 3px 2px #b00 inset;
-}
-.button:hover:after{
+  background-color:#f44;
+  text-shadow:0px -1px 0 #cbb;
+  box-shadow:inset 0px -2px 3px 2px #b33, 0px 1px 3px 0px #333;
 }
 .button:active{
-  box-shadow:0px 5px 3px 2px #b00 inset;
+  box-shadow:inset 0px 5px 3px 2px #b33, 0px 0px 3px 0px #333;
   padding-top:16px;
-}
-.button:active:after{
-  box-shadow:0px 0px 1px 0px #333;
 }
 
 #navTrigger{
