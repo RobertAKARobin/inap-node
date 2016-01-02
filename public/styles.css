@@ -3,7 +3,7 @@
   padding:0;
   border:0;
   outline:none;
-  font-weight:normal;
+  font-weight:inherit;
   text-decoration:none;
   font-family:inherit;
   font-style:normal;
@@ -27,6 +27,7 @@ body{
 }
 
 #mainBox{
+  width:100%;
   min-height:100vh;
   padding:0px 10px;
   overflow:hidden;
@@ -209,26 +210,22 @@ nav input[type=submit]:hover{
   margin:0;
   padding:0;
   z-index:2000;
-  background-color:rgba(0,0,0,0.1);
-  transition:opacity 0.2s, background-color 0.2s;
-  -webkit-transition:opacity 0.2s, background-color 0.2s;
+  background-color:#f00;
+  opacity:1;
 }
 #navTrigger span{
   display:block;
   position:absolute;
   font-size:24px;
   line-height:40px;
-  top:-1em;
-  right:0em;
-  color:#666;
-  transform:rotateZ(-90deg);
-  transform-origin:100% 100%;
+  color:#fff;
+  transform:rotateZ(90deg);
+  top:7em;
+  right:-2px;
+  transform-origin:100% 0%;
   letter-spacing:2px;
   font-weight:bold;
   white-space:nowrap;
-}
-#navTrigger:hover{
-  background-color:rgba(0,0,0,0.2);
 }
 
 html,body{
@@ -265,15 +262,25 @@ nav{
   right:0px;
 }
 
-@media (max-width: 640px){
+@media (max-height: 540px){
   h1{             order:2; }
   #wordTypes{     order:3; }
   #shareLinks{    order:4; }
+}
+@media (max-width: 640px){
+  #promptOutput{ flex-grow: 0; }
+  #shareLinks  { flex-grow: 0; }
   #promptOutput{
     margin-left:0;
     margin-right:0;
     font-size:32px;
-    line-height:42px;
+    line-height:36px;
+  }
+  .button,
+  .button:hover,
+  .button:active{
+    text-shadow:none;
+    font-weight:bold;
   }
   nav{
     padding:10px;
@@ -284,7 +291,7 @@ nav{
   }
   #navToggler:checked+#navTrigger{
     width:100%;
-    background-color:rgba(0,0,0,0.5);
+    opacity:0;
   }
   #navToggler:checked+#navTrigger+#mainBox{
     border-right-width:40px;

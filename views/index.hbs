@@ -16,13 +16,13 @@
   <body>
     {{#if name}}
       <input id="navToggler" type="checkbox" />
-      <label id="navTrigger" for="navToggler"><span>EDIT WORDS&vellip;</span></label>
+      <label id="navTrigger" for="navToggler"><span>&vellip;Customize</span></label>
     {{/if}}
     <div id="mainBox">
       {{#if count}}
-      <h1 id="promptNext" class="button">I Need A Prompt &num;<span id="promptNum">{{count}}</span></h1>
+      <h1 id="promptNext" class="button">Prompt &num;<span id="promptNum">{{count}}</span></h1>
       {{else}}
-      <h1><a href="/" target="_top" class="button">I Need A Prompt</a></h1>
+      <h1><a href="/" target="_top" class="button">I Need A Prompt!</a></h1>
       {{/if}}
 
       <blockquote id="promptOutput">{{prompt}}</blockquote>
