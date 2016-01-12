@@ -16,8 +16,8 @@ module.exports = (function(){
   p.default = INAP.default;
 
   p.choices = ["adjective", "adjective", "noun", "adverb", "verb", "adjective", "adjective", "noun", "location"];
-  
-  p.count = function(){
+
+  p.countOne = function(){
     return counter.count++;
   }
   p.getCount = function(){

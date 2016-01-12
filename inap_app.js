@@ -15,10 +15,6 @@ var Password   = require("./helpers/password");
   app.use(bodyParser.urlencoded({extended: false}));
   app.use(bodyParser.json());
   app.set("view engine", "hbs");
-  app.use("/count", function(req, res, next){
-    var count = (req.method == "POST" ? Prompt.count() : Prompt.getCount());
-    res.json({success: true, count: count});
-  });
   app.use(function(req, res, next){
     res.locals = {
       url:        req.headers.host + req.url,
@@ -47,7 +43,7 @@ Prompt.load = function(req, res, next){
     query:      query,
     english:    obj.english(),
     components: obj.wordOrder,
-    count:      Prompt.count()
+    count:      Prompt.countOne()
   }
   next();
 }
@@ -77,6 +73,13 @@ Dictionary.load = function(req, res, next){
   });
 }
 
+app.get("/count", function(req, res){
+  res.json({success: true, count: Prompt.getCount()});
+});
+app.post("/count", function(req, res){
+  res.json({success: true, count: Prompt.countOne()});
+});
+
 app.get("/",
   isHTML, Dictionary.load, Prompt.load, Prompt.renderHTML);
 app.get("/dictionary/:name",
@@ -98,13 +101,10 @@ app.get("/dictionary/:name/:prompt",
   isHTML, Dictionary.load, function(req, res){
     res.locals.title  = req.params["prompt"];
     res.locals.prompt = req.params["prompt"];
-    res.locals.count  = h.commaNum(Prompt.getCount() - 1);
+    res.locals.count  = h.commaNum(Prompt.getCount());
     res.locals.choices= Prompt.getWordChoices(Prompt.parseQueryString());
     res.render("index");
   });
-app.get("*", function(req, res){
-  res.redirect("/");
-});
 
 app.post("/dictionary", isHTML, function(req, res){
   var name = req.body.dictionary;
