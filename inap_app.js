@@ -16,6 +16,7 @@ var Password   = require("./helpers/password");
   app.use(bodyParser.json());
   app.set("view engine", "hbs");
   app.use(function(req, res, next){
+    res.header("Access-Control-Allow-Origin", "*");
     res.locals = {
       url:        req.headers.host + req.url,
       title:      "I Need A Prompt",
