@@ -89,6 +89,10 @@ app.get("/api",
   isJSON, Dictionary.load, Prompt.load, function(req, res){
     res.json(req.prompt);
   });
+app.get("/api/text",
+	Dictionary.load, Prompt.load, function(req, res){
+		res.send(req.prompt.english);
+	});
 app.get("/dictionary/:name/prompt",
   isJSON, Dictionary.load, Prompt.load, function(req, res){
     req.prompt.dictionaryURL = "http://" + req.headers.host + "/dictionary/" + req.dictionary.name + "/json";
