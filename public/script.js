@@ -11,6 +11,7 @@ window.onload = function(){
 
   updatePlaque(els["promptOutput"].textContent);
   if(els["promptNext"]) els["promptNext"].addEventListener("click", createPrompt);
+  els["promptOutput"].addEventListener("click", v.selectText);
 
   function getEls(elIds){
     var els = {};
@@ -128,6 +129,14 @@ window.onload = function(){
         }else el.style.opacity = opacity;
       }
     }
+	v.selectText = function(event){
+		var el = event.target;
+		var range = document.createRange(el);
+		range.selectNodeContents(el);
+		var sel = window.getSelection();
+		sel.removeAllRanges();
+		sel.addRange(range);
+	}
     return v;
   }
 
